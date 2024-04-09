@@ -1,0 +1,12 @@
+flowchart LR
+    Simulator[Simulator]
+    SDK[SDK]
+    LRS[Internal LRS]
+    Connector[connector]
+    PTX["`Consent
+    Contract
+    Identity`"]
+    Simulator --> SDK
+    SDK --> Connector
+    SDK --> LRS
+    Connector --> PTX

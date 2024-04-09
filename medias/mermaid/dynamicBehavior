@@ -1,0 +1,25 @@
+```mermaid
+---
+title: Sequence Diagram (Connector Data Exchange)
+---
+
+sequenceDiagram
+    participant Simulator as VR Simulator
+    participant SDK as Simulator SDK
+    participant InternalLRS as Internal LRS
+    participant Connector as Data Space Connector
+    participant DataCatalogue as Data Catalogue
+    participant ConsentService as Consent Service
+    participant ContractService as Contract Service
+
+    Simulator->>SDK: publish event
+    SDK->>InternalLRS: Generates xAPI traces
+    SDK->>Connector: Requests data publication
+    Connector->>ConsentService: Verifies user consent
+    ConsentService-->>Connector: Consent validated
+    Connector->>ContractService: Checks contract conditions
+    ContractService-->>Connector: Contract validated
+    Connector->>DataCatalogue: Publishes xAPI traces
+    DataCatalogue-->>Connector: Publication confirmed
+    Connector-->>SDK: Acknowledgement of publication
+```
