@@ -1,4 +1,4 @@
-# Learning traces form VR activities BB – Design Document
+# Learning traces from VR activities BB – Design Document
 
 The "VR Traces" component is designed to capture, record and analyse user interactions with virtual reality (VR) exercises in educational and training contexts. Using the xAPI standard for data structuring, this system enables in-depth analysis of learners' behaviour, successes and difficulties within VR simulations. Key components include the generation of xAPI traces, integration with Learning Record Stores (LRS) for data storage, and analysis tools to interpret the data.Traces are decided by simulator's editor.
 
