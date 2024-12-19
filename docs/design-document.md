@@ -341,13 +341,19 @@ Result :
 }
 ```
 
+<!--- 
+
 ## Architecture
 
 TODO
 
+-->
+
 ## Dynamic Behaviour
 
-![dynamic behavior](/medias/dynamicBehavior.png)
+![dynamic behavior](medias/dynamicBehavior.png)
+
+<!--- 
 
 ## Configuration and deployment settings
 
@@ -389,3 +395,5 @@ Candidates for tools that can be used to implement the test cases: JUnit, Mockit
 _Here specify how to test this component/BB as a whole. This is similar to how other BBs will use this component.  
 Candidates for tools that can be used to implement the test cases: K6, Postman, stepci, Pact  
 An example tutorial is available [here](https://github.com/ftsrg-edu/swsv-labs/wiki/2b-Integration-testing)._
+
+-->
