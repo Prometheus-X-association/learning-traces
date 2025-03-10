@@ -12,7 +12,7 @@ The "VR Traces" component is designed to capture, record and analyse user intera
 - Automated Interaction Capture: Real-time recording of every significant learner action in the VR environment, enabling complete traceability of learning experiences.
 - Standardisation of Learning Data: Use of the xAPI standard to format captured data, ensuring interoperability and compatibility with a variety of LRS systems and analytical tools.
 
-* Prioritisation of Events by Severity: Events captured are classified according to their severity (e.g. "info", "warning", "error"), enabling educators to prioritise interventions or feedback according to the urgency or importance of situations encountered by learners.
+* Prioritisation of Events by Severity: Events captured are classified according to their severity (e.g. "success", "info", "warning", "error"), enabling educators to prioritise interventions or feedback according to the urgency or importance of situations encountered by learners.
 * Performance details by sensor: specific scores for each evaluation criterion, such as safety (80%) and completion time (95%), providing a detailed view of the learner's strengths and areas for improvement.
 
 ##### Value-added
@@ -113,6 +113,10 @@ The sample xAPI traces represent a sequence of events in a fibre welding simulat
 
 The first trace is the initialisation trace, which marks the start of the fibre welding exercise. It contains the following information:
 
+![startSimulation](medias/startExerciseInSimulation.png)
+
+*Start an exercise in simulator*
+
 - Actor: Jean Dupont, the learner.
 - Verb: "initialized", indicating the start of the exercise.
 - Object: The exercise itself, identified by a unique URL which includes the exercise ID (b9e16535-4fc9-4c66-ac87-3ad7ce515f5c), named "fibre welding".
@@ -194,11 +198,16 @@ Summary of this trace is as follows: John Doe(Actor) started (Verb) a fibre weld
 
 At the heart of the fibre welding exercise undertaken by Jean Dupont, a series of xAPI traces captures every key moment, enriching our understanding of how the exercise unfolded. Each trace is classified by its nature on the learning experience.
 
+![InSimulationEvent](medias/multipleChoiceEvent.png)
+*Multiple choice button to send event*
+
+- Success: The traces of success illustrate good choices or actions, often in contradiction with the traces of errors.
+
 - Error: Some tracks reveal moments of challenge or error, such as a non-straight cut, critical errors that require immediate attention.
 
-- Warning: Other marks bear the word warning, such as a stripping that's too short, signalling areas of caution where Jean is invited to pay particular attention to avoid potential mistakes.
+- Info: There are captured moments that provide valuable information, such as event going in the simulation, affirming the right actions and reinforcing good practice.
 
-- Info: And then there are captured moments that provide valuable information, such as the correct wearing of Personal Protective Equipment (PPE), affirming the right actions and reinforcing good practice.
+- Warning: Other marks bear the word warning, such as a stripping that's too short, signalling areas of caution where Jean is invited to pay particular attention to avoid potential mistakes.
 
 - Actor: John Doe, the learner.
 - Verb: "interacted", indicating the interaction.
@@ -208,7 +217,7 @@ At the heart of the fibre welding exercise undertaken by Jean Dupont, a series o
   - Registration: Unique identifier (f47ac10b-58cc-4372-a567-0e02b2c3d479) used as a correlation identifier to link all traces related to this specific exercise attempt by John Doe. Each of these traces, whether it signals an error, a warning, or provides information, is linked by the registration correlation identifier.
   - extensions : sessionid is used to associate the interaction with a specific activity in a Learning Management System (LMS), such as Moodle. The value "moodle-activity-12345" uniquely identifies the activity within Moodle, enabling a direct correlation between learning data captured via xAPI and activities structured and managed via the LMS.
 - result
-  - success : Informs whether the exercise was successful or not
+  - success : Informs whether the event was successful or not
   - extensions : Provides information on the type of event and offers granularity on the action taken. This can be warned for actions requiring attention but remains acceptable, error for actions requiring attention for reasons that invalidate the success of the exercise, the learner is not able to perform this action, Info to give additional information on the context, the action is validated.
 
 ```json
@@ -259,7 +268,10 @@ At the heart of the fibre welding exercise undertaken by Jean Dupont, a series o
 - Context
   This is a reminder of the initial context
 
-Result :
+Result send after quitting exercise:
+
+![endSimulationWithSensors](medias/finishExercise.png)
+*Result value and button to end simulation*
 
 ```json
 {
@@ -287,7 +299,7 @@ Result :
   },
   "result": {
     "score": {
-      "scaled": 0.75
+      "scaled": 0.0
     },
     "success": true,
     "completion": true,
@@ -295,10 +307,8 @@ Result :
     "extensions": {
       "http://example.com/exercises/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c/sensors/score": {
         "ExecutionQuality": 0,
-        "Safety": 1,
-        "Duration": 1,
-        "Autonomy": 1,
-        "Eco responsability": 0.75
+        "Safety": 0,
+        "Duration": 0,
       }
     }
   },
