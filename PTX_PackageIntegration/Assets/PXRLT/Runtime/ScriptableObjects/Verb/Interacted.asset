@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 059753923fd914d4badef79c2977cabb, type: 3}
+  m_Name: Interacted
+  m_EditorClassIdentifier: 
+  _name: interacted
+  _id: http://adlnet.gov/expapi/verbs/interacted
+  _displayPairs:
+  - _language: {fileID: 11400000, guid: ee39754cbc1cd9a4fb55c1d54d5cb544, type: 2}
+    _value: interacted
+  - _language: {fileID: 11400000, guid: 5a9cd5897de4c7c4cb5485c937ef8400, type: 2}
+    _value: a interagi
+  - _language: {fileID: 11400000, guid: d262c86361d0ec6479616be6b4614937, type: 2}
+    _value: interagierte
+  - _language: {fileID: 11400000, guid: 9c3ab723465482c438818d25101e4158, type: 2}
+    _value: "interactu\xF3"

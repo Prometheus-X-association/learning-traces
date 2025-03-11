@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &766964747494619872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8998152975847248353}
+  - component: {fileID: 2523476457056219149}
+  - component: {fileID: 4565506189933822307}
+  m_Layer: 0
+  m_Name: PXRLTManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8998152975847248353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766964747494619872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2523476457056219149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766964747494619872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62d23f276663fb4f89a54fca5a3615c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configObject: {fileID: 11400000, guid: 1318cb9b83188c6498d052cc66005beb, type: 2}
+--- !u!114 &4565506189933822307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766964747494619872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d780c6d3341e51543b3c8ce086368fdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _languagesAvailable:
+  - {fileID: 11400000, guid: ee39754cbc1cd9a4fb55c1d54d5cb544, type: 2}
+  - {fileID: 11400000, guid: 5a9cd5897de4c7c4cb5485c937ef8400, type: 2}
+  - {fileID: 11400000, guid: d262c86361d0ec6479616be6b4614937, type: 2}
+  - {fileID: 11400000, guid: 9c3ab723465482c438818d25101e4158, type: 2}
+  _verbsAvailable:
+  - {fileID: 11400000, guid: 8e16037d8e5ee5646bacda3ce99a8c3a, type: 2}
+  - {fileID: 11400000, guid: a261a2389b8a26846a4d75843b7991be, type: 2}
+  - {fileID: 11400000, guid: f8b17bae960f961499bd57215f8492fc, type: 2}

@@ -1,0 +1,15 @@
+*.csproj
+*.csproj.user
+*.sln
+*.userprefs
+*.vs
+Assembly-UnityScript-vs.unityproj
+Assembly-UnityScript.unityproj
+Library
+Logs
+Log
+Temp
+obj
+[Uu]serSettings/
+
+

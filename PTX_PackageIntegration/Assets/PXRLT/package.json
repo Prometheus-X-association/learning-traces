@@ -1,0 +1,20 @@
+{
+  "name": "com.ptx.xrtraces",
+  "displayName": "PTX XR Learning Traces",
+  "version": "0.0.1",
+  "unity": "2021.3",
+  "description": "Learning traces in xAPI format",
+  "keywords": [
+    "PTX",
+    "VR",
+    "SDK"
+  ],
+  "category": "PTX",
+  "dependencies": {
+  },
+  "author": {
+    "name": "Mimbus",
+    "email": "dev@mimbus.com",
+    "url": "https://www.mimbus.com"
+  }
+}
