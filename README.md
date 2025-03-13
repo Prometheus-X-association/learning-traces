@@ -1,6 +1,6 @@
 # Learning traces from VR activities BB
 
-_Short description of the BB._
+This BB contains a Unity package, which help the implementation and creation of learning traces in xAPI format. The main use case, his to track all events from an exercise in a 3D simulation and record it in a LRS.
 
 ## Design Document
 See the design document [here](docs/design-document.md).

@@ -97,10 +97,10 @@ namespace PXRLT.Test
             _manager.ClearContext();
         }
 
-        private Event CreateEvent(EventStatus status, string key, List<LanguagePair> namePairs)
+        private Event CreateEvent(EventStatus status, string id, List<LanguagePair> namePairs)
         {
             Event evt = new Event();
-            evt.Key = key;
+            evt.Id = id;
             evt.Status = status;
             evt.NamePairs = namePairs;
             return evt;

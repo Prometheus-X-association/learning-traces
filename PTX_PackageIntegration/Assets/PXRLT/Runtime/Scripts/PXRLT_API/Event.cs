@@ -8,10 +8,10 @@ namespace PXRLT
     public class Event
     {
         /// <summary>
-        /// Unique key of this event
+        /// Unique ID of this event
         /// It's a key to be able to identify this event
         /// </summary>
-        private string _key;
+        private string _id;
         /// <summary>
         /// Status type of this event
         /// </summary>
@@ -25,7 +25,7 @@ namespace PXRLT
         /// <summary>
         /// Getter / Setter for _key
         /// </summary>
-        public string Key { get { return _key; } set { _key = value; } }
+        public string Id { get { return _id; } set { _id = value; } }
         /// <summary>
         /// Getter / Setter for _status
         /// </summary>

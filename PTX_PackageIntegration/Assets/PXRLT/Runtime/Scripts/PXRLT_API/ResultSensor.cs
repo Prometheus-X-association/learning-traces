@@ -10,7 +10,7 @@ namespace PXRLT
         /// <summary>
         /// Unique key defining ths sensor
         /// </summary>
-        private string _key = string.Empty;
+        private string _id = string.Empty;
         /// <summary>
         /// Value of the sensor
         /// </summary>
@@ -20,7 +20,7 @@ namespace PXRLT
         /// <summary>
         /// Getter for _key
         /// </summary>
-        public string Key { get { return _key; } }
+        public string Id { get { return _id; } }
         /// <summary>
         /// Getter for _value
         /// </summary>
@@ -32,9 +32,9 @@ namespace PXRLT
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public ResultSensor(string key, float value)
+        public ResultSensor(string id, float value)
         {
-            _key = key;
+            _id = id;
             _value = value;
         }
     }

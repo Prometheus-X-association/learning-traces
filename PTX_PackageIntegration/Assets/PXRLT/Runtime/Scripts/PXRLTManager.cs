@@ -197,7 +197,7 @@ namespace PXRLT
         {
             XAPI.Verb verb = _interactVerb.CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}/events/{eventToSend.Key}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}/events/{eventToSend.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/interaction";
             AddNameAndDefinition(ref currentActivityMetaData, eventToSend.NamePairs, new List<LanguagePair>());
@@ -247,7 +247,7 @@ namespace PXRLT
 
             Dictionary<string, float> sensorsResult = new Dictionary<string, float>();
             foreach (ResultSensor sensor in result.Sensors)
-                sensorsResult[sensor.Key] = sensor.Value;
+                sensorsResult[sensor.Id] = sensor.Value;
             xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}/sensors/score", sensorsResult);
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
