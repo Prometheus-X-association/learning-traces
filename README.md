@@ -186,7 +186,7 @@ When you end an exercise you are send back to the connexion menu where you can g
 _**Start Exercise**_
 
 Input (_Click on start exercise_)
-![image](READ_ME-Resources/StartExercise_ExpectedResult.png)
+![image](./READ_ME-resources/StartExercise_ExpectedResult.png)
 
 Output on LRS after clicking on start exercise button
 ```
@@ -288,7 +288,7 @@ Output on LRS after clicking on start exercise button
 _**Send Events**_
 
 Input (_Click on send success event button_)\
-![image](READ_ME-Resources/ExerciseMenu_ExpectedResult_SendSuccessEvent.png)
+![image](./READ_ME-Resources/ExerciseMenu_ExpectedResult_SendSuccessEvent.png)
 
 
 Output
@@ -390,7 +390,7 @@ Output
 _**End Exercise**_
 
 Input (_Click on end exercise_)
-![image](READ_ME-Resources/ExerciseMenu_ExpectedResult_EndExercise.png)
+![image](./READ_ME-Resources/ExerciseMenu_ExpectedResult_EndExercise.png)
 
 Output
 
