@@ -21,26 +21,128 @@ From this launcher download an Unity version (at least 2023.2.x).
 * A project on Unity 6000.0.38f1 is already available in the current repository.\
 The package is already in it, you can use it as a base for your application.
 
+\
+After creating your project, you will have to create a new LRS Configuration in Unity.\
+![image](./READ_ME-resources/FindLRSConfiguration.png)
+
+This object will allow you to set your targeted LRS database.\
+![image](./READ_ME-resources/LRSConfiguration.png)
+
+To finish setup, put the PXRLTManager prefab in "PXRLT/Runtime/Prefabs/" and refence your newly created LRS configuration in it.
+
 ## Running instructions
 _Describe how to run the BB._
 
-
-
+As only running instructions, run unity simulation.
 
 ## Example usage
 _Describe how to check some basic functionality of the BB._
 
 
+This example will show how to send a initialized trace in an LRS. 
+Language available (English, French, German, Spanish)
+
+* Input
+![image](./READ_ME-resources/Example_usage.png)
 
 
-E.g.:
+* Output given in your LRS or Unity editor message window
+```
+{
+    "id": "bfdee4d5-7108-4f93-87b3-64b1a2fefe98",
+    "actor": {
+        "objectType": "Agent",
+        "name": "Test",
+        "mbox": "mailto:test@mimbus.com"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/initialized",
+        "display": {
+            "es-ES": "inicializó",
+            "de-DE": "initialisierte",
+            "en-US": "initialized",
+            "fr-FR": "a initialisé"
+        }
+    },
+    "context": {
+        "extensions": {
+            "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-12345"
+        },
+        "registration": "f3643fdb-d443-47c7-9bd9-243f09afcf04",
+        "language": "en-US",
+        "contextActivities": {
+            "parent": [
+                {
+                    "id": "http://example.com/courses/XXXX",
+                    "definition": {
+                        "name": {
+                            "es-ES": "Name for Spanish (Spain)",
+                            "de-DE": "Name for German (Germany)",
+                            "en-US": "Name for English (US)",
+                            "fr-FR": "Name for French (France)"
+                        },
+                        "description": {
+                            "es-ES": "Description for Spanish (Spain)",
+                            "de-DE": "Description for German (Germany)",
+                            "en-US": "Description for English (US)",
+                            "fr-FR": "Description for French (France)"
+                        },
+                        "type": "http://adlnet.gov/expapi/activities/course"
+                    },
+                    "objectType": "Activity"
+                }
+            ],
+            "category": [
+                {
+                    "id": "https://w3id.org/xapi/simulation/v1.0",
+                    "definition": {
+                        "name": {
+                            "es-ES": "Category for Spanish (Spain)",
+                            "de-DE": "Category for German (Germany)",
+                            "en-US": "Category for English (US)",
+                            "fr-FR": "Category for French (France)"
+                        },
+                        "description": {},
+                        "type": "http://id.tincanapi.com/activitytype/category"
+                    },
+                    "objectType": "Activity"
+                }
+            ]
+        },
+        "platform": "NAME_OF_YOUR_PLATFORM"
+    },
+    "timestamp": "2025-03-12T10:18:31.470Z",
+    "stored": "2025-03-12T10:18:31.534Z",
+    "authority": {
+        "objectType": "Agent",
+        "account": {
+            "name": "NAME_OF_LRS",
+            "homePage": "http://cloud.scorm.com"
+        }
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "https://navy.mil/netc/xapi/activities/simulations/0000-0000-0000-0001",
+        "definition": {
+            "name": {
+                "es-ES": "Name for Spanish (Spain)",
+                "de-DE": "Name for German (Germany)",
+                "en-US": "Name for English (US)",
+                "fr-FR": "Name for French (France)"
+            },
+            "description": {
+                "es-ES": "Description for Spanish (Spain)",
+                "de-DE": "Description for German (Germany)",
+                "en-US": "Description for English (US)",
+                "fr-FR": "Description for French (France)"
+            },
+            "type": "http://adlnet.gov/expapi/activities/simulation"
+        },
+        "objectType": "Activity"
+    }
+}
+```
 
-Send the following requests to the designated endpoints:
-| Endpoint      | Example input | Expected output   |
-| ------------- | ------------- | ----------------- |
-| /hello        | World         | 200, Hello World! |
-|               |               |                   |
-|               |               |                   |
 
 ## Unit testing
 ### Setup test environment
