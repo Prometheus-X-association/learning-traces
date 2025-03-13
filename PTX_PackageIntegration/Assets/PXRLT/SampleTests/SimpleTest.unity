@@ -8507,10 +8507,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PXRLTManager
       objectReference: {fileID: 0}
-    - target: {fileID: 2523476457056219149, guid: 07cb8cb070afb864da769b4869fd7569, type: 3}
-      propertyPath: configObject
-      value: 
-      objectReference: {fileID: 11400000, guid: 625455294bd7bd4409683d74f1014d79, type: 2}
     - target: {fileID: 8998152975847248353, guid: 07cb8cb070afb864da769b4869fd7569, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
