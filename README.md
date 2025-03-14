@@ -1,6 +1,6 @@
 # Learning traces from VR activities BB
 
-This BB contains a Unity package, which help the implementation and creation of learning traces in xAPI format. The main use case, his to track all events from an exercise in a 3D simulation and record it in a LRS.
+This BB contains a Unity package, which help the implementation and creation of learning traces in xAPI format. The main use case, is to track all events from an exercise in a 3D simulation and record it in a LRS.
 
 ## Design Document
 See the design document [here](docs/design-document.md).
@@ -28,7 +28,7 @@ After creating your project, you will have to create a new LRS Configuration in 
 This object will allow you to set your targeted LRS database.\
 ![image](./READ_ME-resources/LRSConfiguration.png)
 
-To finish setup, put the PXRLTManager prefab in "PXRLT/Runtime/Prefabs/" and refence your newly created LRS configuration in it.
+To finish setup, put the PXRLTManager prefab in "PXRLT/Runtime/Prefabs/" and reference your newly created LRS configuration in it.
 
 ## Running instructions
 _Describe how to run the BB._
@@ -149,7 +149,7 @@ Language available (English, French, German, Spanish)
 
 In the "PXRLT/SampleTests" folder you can find a unity scene "SimpleScene.unity". _(Open it)_
 
-This test example consist in two menu :
+This test example consists in two menu :
 * **Connexion menu** : a menu to choose context field
     * _Username_ : name of the user
     * _Email_ : email address of the user
@@ -164,7 +164,7 @@ This test example consist in two menu :
     * _Error Event_ : Send a error event to a LRS
     * _Results sliders_ : Select results for the 3 sensors
 
-To send your result in a LRS you'll need to create a new LRS configuration.\
+To send your result in an LRS you'll need to create a new LRS configuration.\
 To do this, go to the project editor window and create a "LRS Configuration" under Create/xAPI/LRS Configuration.
 
 Fill the new LRS Configuration with your LRS information then reference it in the PXRLTManager prefab in the scene.
@@ -172,14 +172,14 @@ Fill the new LRS Configuration with your LRS information then reference it in th
 ### Run tests
 
 Start Unity simulation after finishing the setup.\
-You'll be able to fill all field and start an exercise.
+You'll be able to fill all fields and start an exercise.
 
-Going to the exercise menu, you can do multiples things :
+Going to the exercise menu, you can do multiples things:
 * Send event trace with buttons
 * Modify name and value or each sensors
 * End exercise
 
-When you end an exercise you are send back to the connexion menu where you can go for an other batch of traces.
+When you end an exercise, you are sent back to the connexion menu where you can go for another batch of traces.
 
 ### Expected results
 

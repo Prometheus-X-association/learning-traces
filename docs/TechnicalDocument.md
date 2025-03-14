@@ -6,44 +6,44 @@ In this document, you will learn how to use the PTX_learningTraces package.
 
 ### PXRLTManager
 
-The PXRLTManager is the main manager on this package\
-It include the Singleton Pattern, so it accessible with `PackageManager.Instance`.\
+The PXRLTManager is the main manager on this package.\
+It includes the Singleton Pattern, so it accessible with `PackageManager.Instance`.\
 This class is the entry point to make all different traces and send them.
 
 | Public methods       | Description       |
 |---------------|-------------------|
 | ClearContext              | Reset context activity and lms session name |
 | ClearUserInformation      | Reset user informations |
-| InitializeContext         | Initialize context activity and lms session name, it define the parent activity in case you have a LMS session to link to your activity or/and fill category of the activity |
-| InitializeUserInformation | Initialize user informations for next traces. If isAnonymous is true, the email adress will always be equal to `anonymous@domain.com` and userName will be randomly created.|
-| SendEventTrace            | Send a trace of event in the targeted LRS |
+| InitializeContext         | Initialize context activity and lms session name, it defines the parent activity in case you have a LMS session to link to your activity or/and fill categories of the activity |
+| InitializeUserInformation | Initialize user informations for next traces. If isAnonymous is true, the email adress will always be equal to `anonymous@domain.com` and username will be randomly created.|
+| SendEventTrace            | Send a trace of an event in the targeted LRS |
 | SendInitializeTrace       | Send a trace of initialization in the targeted LRS |
 | SendResultTrace           | Send a trace of result in the LRS |
 
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | LanguagesAvailable    | Languages available in the PXRLTManager set previously in editor  | Get only |
 | LSMSessionName        | Current LMS session name                                          | Get only |
 
 ### LanguageData
 
-This class is a ScriptableObject class, it contains language information.\
+This class is a ScriptableObject class, and it contains language information.\
 _We use ScriptableObject instead of enum to make it scalable_
 
 In this data you'll find the name of a language by RFC-5646 norm and his fullname.
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
-| FullName    | Fullname of a language ex : English (US)        | Get only |
-| Name        | Name of a language based on RFC-5646 ex : es-US | Get only |
+| FullName    | Fullname of a language ex: English (US)        | Get only |
+| Name        | Name of a language based on RFC-5646 ex: es-US | Get only |
 
 
 ### LanguagePair
 
 This class is a serializable version of a pair of LanguageData and a value.
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | Language    | LanguageData instance from ScriptableObject     | Get only |
 | Value       | Value pair with languageData                    | Get only |
@@ -54,10 +54,10 @@ This class is a serializable version of a pair of LanguageData and a value.
 This class is a representation of xAPI.ContextActivities.\
 It implement only the specific part we use for VR learning traces.
 
-ContextActivities in xAPI format define a parent Activity like LMS information to link to a LMS courses for example, and the category of our activity.\
+ContextActivities in xAPI format define a parent Activity like LMS information to link to a LMS course for example and the category of our activity.\
 In our case we can tell that the category is "VR exercise" or "Simulation exercise".
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | ParentActivityId                  | Parent activity ID                              | Get / Set |
 | ParentActivityNamePairs           | Parent activity name by language list           | Get / Set |
@@ -69,9 +69,9 @@ In our case we can tell that the category is "VR exercise" or "Simulation exerci
 This class is a representation of xAPI.Actor.\
 It implement only the specific part we use for VR learning traces.
 
-Actor in xAPI format define the type of actor we want to link to our activity, for our use case it will be an Actor created with an email adress and a fullName.
+Actor in xAPI format define the type of actor we want to link to our activity, for our use case it will be an Actor created with an email address and a fullName.
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | Email       | Email of the user        | Get / Set |
 | FullName    | Fullname of the user     | Get / Set |
@@ -79,11 +79,11 @@ Actor in xAPI format define the type of actor we want to link to our activity, f
 ### Activity
 
 This class is a representation of xAPI.Activity.\
-It implement only the specific part we use for VR learning traces.
+It implements only the specific part we use for VR learning traces.
 
 Activity in xAPI format define the nature of our activity, it contains our exercise data like the ID of the exercise, the ID of this instance of the exercise (registration ID), the language used and the platform we use (name of the simulator or application).
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | ExerciseId         | Exercise unique ID                               | Get / Set |
 | RegistrationId     | Exercise registration instance ID                | Get / Set |
@@ -94,12 +94,12 @@ Activity in xAPI format define the nature of our activity, it contains our exerc
 
 ### Result
 
-This class contains score of the user, and a status of why the exercise finished. With this information you can see if the user succeed or not and if he finished, aborted or have a fatal error during the exercise.\
-You can also find a list of subresult represented as ResultSensor.   
+This class contains the global score of the user, and a status of why the exercise finished. With this information you can see if the user succeed or not and if he finished, aborted or have a fatal error during the exercise.\
+You can also find a list of sub result represented as ResultSensor.   
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
-| Score              | Score of the exercise                                            | Get / Set |
+| Score              | Global score of the exercise                                     | Get / Set |
 | ExerciseStatus     | Exercise status (SUCCEED or FAILED)                              | Get / Set |
 | ResultStatus       | How exercise finished (FINISHED, ABORTED, FATAL_ERROR)           | Get / Set |
 | NamePairs          | Result name by language list                                     | Get / Set |
@@ -107,18 +107,18 @@ You can also find a list of subresult represented as ResultSensor.
 
 ### ResultSensor
 
-This class contains a key and a float value, it represent subresult in your exercise. Sometimes the global result is not enough to define what the user made so we divide it on subresult call as sensors.
+This class contains a key and a float value, it represents sub result in your exercise. Sometimes the global result is not enough to define what the user made so we divide it on sub result call as sensors.
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | Id          | Unique ID of this sensor        | Get only |
 | Value       | Score of the sensor              | Get only |
 
 ### Event
 
-This class contains event data such has event type and an unique event key which allow us to identify each event from another.
+This class contains event data such has event type and a unique event key which allow us to identify each event from another.
 
-| Public variables      | Description       | Accessibilty |
+| Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
 | Id                    | Unique ID of this event                                         | Get / Set |
 | EventStatus           | Event status (SUCCESS, INFO, WARNING, ERROR)                    | Get / Set |
