@@ -42,14 +42,49 @@ _Describe how to check some basic functionality of the BB._
 This example will show how to send a initialized trace in an LRS. 
 Language available (English, French, German, Spanish)
 
-* Input
-![image](./READ_ME-resources/Example_usage.png)
+* Input for initialized traces (Unity implementation for users)\
 
+```c#
+// Creation of user information to send
+UserInformation userInformation = new UserInformation();
+userInformation.Fullname = "Test";
+userInformation.Email = "test@mimbus.com";
+
+// Creation of context activities
+ContextActivities contextActivities = new ContextActivities();
+// (optionnal) Parent activity Id to link with an LMS for example 
+contextActivities.ParentActivityId = "https://example.com/courses/XXXX";
+foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+{
+    contextActivities.ParentActivityNamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+    contextActivities.ParentActivityDescriptionPairs.Add(new LanguagePair(language, $"Description for {language.FullName}"));
+    contextActivities.ActivityCategoryPairs.Add(new LanguagePair(language, $"Category for {language.FullName}"));
+}
+
+// Creation of the activity
+Activity activity = new Activity();
+// id : Name of your exercise, unique for each one
+activity.ExerciseId = "EXERCISE_ID";
+// id : GUID to this linked trace to other from the same exercise
+activity.RegistrationId = System.Guid.NewGuid().ToString(); //(REGISTRATION_ID)
+// Name of your project
+activity.PlatformName = "NAME_OF_YOUR_PLATFORM";
+// language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
+activity.LanguageUsed = PXRLTManager.Instance.LanguagesAvailable.First();
+foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+{
+    activity.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+    activity.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+}
+
+// Initiliaze context on PXRLTManager
+PXRLTManager.Instance.InitializeContext(contextActivities);
+```
 
 * Output given in your LRS or Unity editor message window
 ```
 {
-    "id": "bfdee4d5-7108-4f93-87b3-64b1a2fefe98",
+    "id": "40eb493f-0c11-45b0-9dde-fe84a590daea",
     "actor": {
         "objectType": "Agent",
         "name": "Test",
@@ -65,10 +100,7 @@ Language available (English, French, German, Spanish)
         }
     },
     "context": {
-        "extensions": {
-            "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-12345"
-        },
-        "registration": "f3643fdb-d443-47c7-9bd9-243f09afcf04",
+        "registration": "{REGISTRATION_ID}",
         "language": "en-US",
         "contextActivities": {
             "parent": [
@@ -122,7 +154,7 @@ Language available (English, French, German, Spanish)
     },
     "version": "1.0.0",
     "object": {
-        "id": "https://navy.mil/netc/xapi/activities/simulations/0000-0000-0000-0001",
+        "id": "https://navy.mil/netc/xapi/activities/simulations/{EXERCISE_ID}",
         "definition": {
             "name": {
                 "es-ES": "Name for Spanish (Spain)",
@@ -137,6 +169,152 @@ Language available (English, French, German, Spanish)
                 "fr-FR": "Description for French (France)"
             },
             "type": "http://adlnet.gov/expapi/activities/simulation"
+        },
+        "objectType": "Activity"
+    }
+}
+```
+
+Example to make a result trace
+
+* Input (Unity implementation)\
+
+```c#
+// Context and User informations should be already setup on the initialized traces
+
+// Creation of the activity
+Activity activity = new Activity();
+// id : Name of your exercise, unique for each one
+activity.ExerciseId = "EXERCISE_ID";
+// id : GUID to this linked trace to other from the same exercise
+activity.RegistrationId = System.Guid.NewGuid().ToString(); //(REGISTRATION_ID)
+// Name of your project
+activity.PlatformName = "NAME_OF_YOUR_PLATFORM";
+// language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
+activity.LanguageUsed = PXRLTManager.Instance.LanguagesAvailable.First();
+foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+{
+    activity.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+    activity.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+}
+
+// Creation of result information
+Result result = new Result();
+// Global score of the result
+result.Score = 0.5f;
+// Exercise end status
+result.ExerciseStatus = ExerciseStatus.SUCCEED;
+// Result end status
+result.ResultStatus = ResultStatus.FINISHED;
+// Add result trace name for each languages
+foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+    result.NamePairs.Add(new LanguagePair(language, $"Result for {language.FullName}"));
+// Add a sensor value in this result trace
+ResultSensor sensor = new ResultSensor("SENSOR_ID", 0.0f);
+result.Sensors.Add(sensor);
+
+// Send result traces
+PXRLTManager.Instance.SendResultTrace(activity, result);
+// (optionnal) After sending a result traces you want to clear the context
+PXRLTManager.Instance.ClearContext();
+PXRLTManager.Instance.ClearUserInformation();
+```
+
+* Output
+
+```
+{
+    "id": "40eb493f-0c11-45b0-9dde-fe84a590daea",
+    "actor": {
+        "objectType": "Agent",
+        "name": "Test",
+        "mbox": "mailto:test@mimbus.com"
+    },
+    "verb": {
+        "id": "http://adlnet.gov/expapi/verbs/completed",
+        "display": {
+            "es-ES": "completó",
+            "de-DE": "beendete",
+            "en-US": "completed",
+            "fr-FR": "a terminé"
+        }
+    },
+    "result": {
+        "extensions": {
+            "https://navy.mil/netc/xapi/activities/simulations/{EXERCISE_ID}/sensors/score": {
+                "SENSOR_ID": 0,
+            }
+        },
+        "score": {
+            "scaled": 0.5
+        },
+        "success": true,
+        "completion": true,
+        "response": ""
+    },
+    "context": {
+        "registration": "{REGISTRATION_ID}",
+        "contextActivities": {
+            "parent": [
+                {
+                    "id": "http://example.com/courses/XXXX",
+                    "definition": {
+                        "name": {
+                            "es-ES": "Name for Spanish (Spain)",
+                            "de-DE": "Name for German (Germany)",
+                            "en-US": "Name for English (US)",
+                            "fr-FR": "Name for French (France)"
+                        },
+                        "description": {
+                            "es-ES": "Description for Spanish (Spain)",
+                            "de-DE": "Description for German (Germany)",
+                            "en-US": "Description for English (US)",
+                            "fr-FR": "Description for French (France)"
+                        },
+                        "type": "http://adlnet.gov/expapi/activities/course"
+                    },
+                    "objectType": "Activity"
+                }
+            ],
+            "category": [
+                {
+                    "id": "https://w3id.org/xapi/simulation/v1.0",
+                    "definition": {
+                        "name": {
+                            "es-ES": "Category for Spanish (Spain)",
+                            "de-DE": "Category for German (Germany)",
+                            "en-US": "Category for English (US)",
+                            "fr-FR": "Category for French (France)"
+                        },
+                        "description": {},
+                        "type": "http://id.tincanapi.com/activitytype/category"
+                    },
+                    "objectType": "Activity"
+                }
+            ]
+        }
+    },
+    "timestamp": "2025-03-12T10:18:38.386Z",
+    "stored": "2025-03-12T10:18:38.377Z",
+    "authority": {
+        "objectType": "Agent",
+        "account": {
+            "name": "NAME_OF_LRS",
+            "homePage": "http://cloud.scorm.com"
+        }
+    },
+    "version": "1.0.0",
+    "object": {
+        "id": "https://navy.mil/netc/xapi/activities/simulations/{EXERCISE_ID}",
+        "definition": {
+            "name": {
+                "es-ES": "Result for Spanish (Spain)",
+                "de-DE": "Result for German (Germany)",
+                "en-US": "Result for English (US)",
+                "fr-FR": "Result for French (France)"
+            },
+            "description": {},
+            "type": "http://adlnet.gov/expapi/activities/exercise"
         },
         "objectType": "Activity"
     }

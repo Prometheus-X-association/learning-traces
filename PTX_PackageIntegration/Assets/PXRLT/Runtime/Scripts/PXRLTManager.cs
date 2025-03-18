@@ -93,9 +93,12 @@ namespace PXRLT
         /// </summary>
         /// <param name="lmsSessionName"></param>
         /// <param name="contextActivities"></param>
-        public void InitializeContext(string lmsSessionName, PXRLT.ContextActivities contextActivities)
+        public void InitializeContext(PXRLT.ContextActivities contextActivities, string lmsSessionName = null)
         {
-            _lmsSessionName = lmsSessionName;
+            if (lmsSessionName == null)
+                _lmsSessionName = string.Empty;
+            else
+                _lmsSessionName = lmsSessionName;
             _currentContext = new XAPI.ContextActivities();
 
             if (string.IsNullOrWhiteSpace(contextActivities.ParentActivityId))

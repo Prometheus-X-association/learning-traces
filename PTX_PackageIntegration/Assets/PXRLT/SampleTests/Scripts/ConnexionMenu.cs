@@ -1,9 +1,7 @@
 using System.Linq;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using XAPI;
 
 namespace PXRLT.Test
 {
@@ -63,7 +61,7 @@ namespace PXRLT.Test
             _uiManager.UserInformation.Fullname = _fullNameField.text;
             _uiManager.UserInformation.Email = _emailAdressField.text;
 
-            _manager.InitializeContext(_lmsSessionName.text, _uiManager.ContextActivities);
+            _manager.InitializeContext(_uiManager.ContextActivities, _lmsSessionName.text);
             _manager.InitializeUserInformation(_sendAnonymousTracksToggle.isOn, _uiManager.UserInformation);
 
             _uiManager.CurrentActivity = new Activity();
