@@ -79,6 +79,11 @@ foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
 
 // Initiliaze context on PXRLTManager
 PXRLTManager.Instance.InitializeContext(contextActivities);
+// Initiliaze user information on PXRLTManager
+PXRLTManager.Instance.InitializeUserInformation(userInformation);
+// Send Initialize trace
+PXRLTManager.Instance.SendInitializeTrace(activity);
+
 ```
 
 * Output given in your LRS or Unity editor message window
@@ -213,7 +218,7 @@ foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
 ResultSensor sensor = new ResultSensor("SENSOR_ID", 0.0f);
 result.Sensors.Add(sensor);
 
-// Send result traces
+// Send result trace
 PXRLTManager.Instance.SendResultTrace(activity, result);
 // (optionnal) After sending a result traces you want to clear the context
 PXRLTManager.Instance.ClearContext();
@@ -325,7 +330,24 @@ PXRLTManager.Instance.ClearUserInformation();
 ## Unit testing
 ### Setup test environment
 
-In the "PXRLT/SampleTests" folder you can find a unity scene "SimpleScene.unity". _(Open it)_
+In the "PXRLT/Runtime/SampleTests" folder you can find a unity scene "UnitTest.unity". _(Open it)_\
+This test is already preconfigured.
+
+### Run tests
+
+Start unity simulation, and click on the "Start Test" button to run your unit tests.
+
+### Expected results
+
+The expected results are in the Unity console. All tests can be success or fail.
+
+![image](./READ_ME-resources/UnitTest.png)
+
+## Component-level testing
+
+### Setup test environment
+
+In the "PXRLT/Runtime/SampleTests" folder you can find a unity scene "FunctionnalTest.unity". _(Open it)_
 
 This test example consists in two menu :
 * **Connexion menu** : a menu to choose context field
@@ -675,8 +697,3 @@ Output
     }
 }
 ```
-
-## Component-level testing
-### Setup test environment
-### Run tests
-### Expected results

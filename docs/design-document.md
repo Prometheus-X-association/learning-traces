@@ -2,6 +2,24 @@
 
 The "VR Traces" component is designed to capture, record and analyse user interactions with virtual reality (VR) exercises in educational and training contexts. Using the xAPI standard for data structuring, this system enables in-depth analysis of learners' behaviour, successes and difficulties within VR simulations. Key components include the generation of xAPI traces, integration with Learning Record Stores (LRS) for data storage, and analysis tools to interpret the data.Traces are decided by simulator's editor.
 
+<!--- 
+
+## Consentment
+
+In this package, you'll have the 
+
+-->
+
+## Context
+
+This BB needs some keywords to understand it.
+
+* **Sensor**: This is a value used for the definition of result. Indeed, a result is not only composed of an overall score but also more precise scoring such as the sensors.Defined by a key and a value, it is often taken into account in the overall score.
+It is representing a competence evaluated during our exercise, such as for example the quality of execution or the safety of the work area, etc... 
+
+* **Event**: This is an action that deserves to be recorded in the execution of the exercise.
+Defined by the creator of the software, it allows you to see errors, users' failures or users success but also to report important events that occur in the exercise.
+
 ## Technical usage scenarios & Features
 
 - xAPI Trace Generation: Automated creation of xAPI traces for every significant interaction within VR environments, providing a detailed record of learner activity.
@@ -363,6 +381,29 @@ TODO
 
 ![dynamic behavior](medias/dynamicBehavior.png)
 
+## Test specification
+
+This BB will provide a unity package which includes multiple Unity scenes.\
+In these scenes, an interface will permit to run all the tests.
+
+### Test plan
+
+This BB will mostly work with Unity in runtime.\
+You don't need to connect Unity with an LRS to test this package. All traces could be found in the console of Unity Editor.\
+Test scene will be providing for "Internal unit tests" and "Component-level tests."
+
+### Internal unit tests
+
+Internal unit tests will be made by a script in a test scene to create, one full exercise traces with initialized, event-success, event-info, event-warning, event-error and result trace with predefine values.
+Files with traces already done will be here to compare with results of the test to see regressions.
+
+### Component-level testing
+
+After a creation of a ScriptableObject in unity, to make your LRS configuration, run the provided test scene.
+In Unity runtime mode, you will be able to fill the available fields (user informations and exercise informations) and create the three types of traces.
+
+You'll be able to find your traces, in your connected LRS and in the Console of Unity Editor.
+
 <!--- 
 
 ## Configuration and deployment settings
@@ -377,33 +418,8 @@ How is the component logging the operations? What are the error scenarios? What 
 \_Does this BB rely on any 3rd-party components?
 See also the "EDGE third party/background components" spreadsheet.
 
-## Implementation Details
-
-_This is optional: remove this heading if not needed.
-You can add details about implementation plans and lower-level design here._
-
 ## OpenAPI Specification
 
 \_In the future: link your OpenAPI spec here.
-
-## Test specification
-
-_Test definitions and testing environment should be availaible, and the tests should be repeatable._
-
-### Test plan
-
-Testing strategy, tools and methods chosen, methods for acceptance criteria.
-To be detailed.
-
-### Internal unit tests
-
-_Here specify the test cases for the units inside the BB.  
-Candidates for tools that can be used to implement the test cases: JUnit, Mockito, Pytest._
-
-### Component-level testing
-
-_Here specify how to test this component/BB as a whole. This is similar to how other BBs will use this component.  
-Candidates for tools that can be used to implement the test cases: K6, Postman, stepci, Pact  
-An example tutorial is available [here](https://github.com/ftsrg-edu/swsv-labs/wiki/2b-Integration-testing)._
 
 -->

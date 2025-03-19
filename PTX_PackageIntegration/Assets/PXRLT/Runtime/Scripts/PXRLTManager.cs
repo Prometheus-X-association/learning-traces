@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PXRLT
 {
@@ -56,6 +57,11 @@ namespace PXRLT
         /// </summary>
         private Verb _interactVerb = null;
 
+        /// <summary>
+        /// Send an event when a trace is sent
+        /// </summary>
+        private bool _logTrace = false;
+
         #region Accessors
         /// <summary>
         /// Getter for _lmsSessionName
@@ -65,6 +71,19 @@ namespace PXRLT
         /// Getter for _languagesAvailable
         /// </summary>
         public List<LanguageData> LanguagesAvailable => _languagesAvailable;
+        /// <summary>
+        /// Getter for _logTrace
+        /// (only available in assembly)
+        /// </summary>
+        internal bool LogTrace { get { return _logTrace; } set { _logTrace = value; } }
+        #endregion
+
+        #region Event
+        /// <summary>
+        /// Event send when a trace is sent and _logTrace is true
+        /// (only available in assembly)
+        /// </summary>
+        internal UnityEvent<XAPI.StatementStoredResponse> OnTraceSend = new UnityEvent<XAPI.StatementStoredResponse>();
         #endregion
 
         /// <summary>
@@ -188,6 +207,8 @@ namespace PXRLT
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
                 Log($"Sent beginning statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceSend?.Invoke(res);
             });
         }
 
@@ -224,6 +245,8 @@ namespace PXRLT
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
                 Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceSend?.Invoke(res);
             });
         }
 
@@ -268,6 +291,8 @@ namespace PXRLT
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
                 Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceSend?.Invoke(res);
             });
         }
         #endregion
