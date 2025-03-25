@@ -181,7 +181,7 @@ namespace PXRLT
         /// It's the beginning of exercise traces
         /// </summary>
         /// <param name="activity"></param>
-        public void SendInitializeTrace(Activity activity)
+        public void SendInitializeTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Verb verb = _initializeVerb.CreateVerb();
 
@@ -198,10 +198,17 @@ namespace PXRLT
             statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrWhiteSpace(_lmsSessionName))
             {
-                statement.Context.Extensions = new Dictionary<string, string>();
                 statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
+            }
+            if (contextExtensions != null)
+            {
+                foreach (var extension in contextExtensions)
+                {
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+                }
             }
 
             XAPI.XAPIWrapper.SendStatement(statement, res =>
@@ -217,7 +224,7 @@ namespace PXRLT
         /// </summary>
         /// <param name="activity"></param>
         /// <param name="eventToSend"></param>
-        public void SendEventTrace(Activity activity, Event eventToSend)
+        public void SendEventTrace(Activity activity, Event eventToSend, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Verb verb = _interactVerb.CreateVerb();
 
@@ -236,10 +243,18 @@ namespace PXRLT
             statement.Context.Registration = activity.RegistrationId;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(_lmsSessionName))
             {
                 statement.Context.Extensions = new Dictionary<string, string>();
                 statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
+            }
+            if (contextExtensions != null)
+            {
+                foreach (var extension in contextExtensions)
+                {
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+                }
             }
 
             XAPI.XAPIWrapper.SendStatement(statement, res =>
@@ -256,7 +271,7 @@ namespace PXRLT
         /// </summary>
         /// <param name="activity"></param>
         /// <param name="result"></param>
-        public void SendResultTrace(Activity activity, Result result)
+        public void SendResultTrace(Activity activity, Result result, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Verb verb = _completeVerb.CreateVerb();
 
@@ -282,10 +297,18 @@ namespace PXRLT
             statement.Context.Registration = activity.RegistrationId;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(_lmsSessionName))
             {
                 statement.Context.Extensions = new Dictionary<string, string>();
                 statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
+            }
+            if (contextExtensions != null)
+            {
+                foreach (var extension in contextExtensions)
+                {
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+                }
             }
 
             XAPI.XAPIWrapper.SendStatement(statement, res =>
