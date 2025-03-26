@@ -1,0 +1,52 @@
+FROM node:20-alpine as frontend
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM webdevops/php-nginx:8.3-alpine
+
+# Install system + PHP extensions
+RUN apk add --no-cache \
+    postgresql-dev \
+    oniguruma-dev \
+    libxml2-dev \
+    nodejs \
+    npm \
+    git \
+    unzip \
+    && docker-php-ext-install \
+        bcmath \
+        ctype \
+        fileinfo \
+        mbstring \
+        pdo_pgsql \
+        xml
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+ENV WEB_DOCUMENT_ROOT /app/public
+WORKDIR /app
+
+COPY . .
+
+RUN cp -n .env.example .env
+
+# Install dependencies
+RUN composer install --no-interaction --optimize-autoloader
+#RUN npm install && npm run build
+
+
+COPY --from=frontend /app/public/build ./public/build
+
+# Fix permissions
+RUN chown -R application:application .
+
+# Add entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]
