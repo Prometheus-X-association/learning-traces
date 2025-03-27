@@ -386,6 +386,9 @@ TODO
 This BB will provide a unity package which includes multiple Unity scenes.\
 In these scenes, an interface will permit to run all the tests.
 
+Please note that performing the Component-level testing requires a functional LRS available.
+If needed, this BB also provides an optional LRS (Trax 3 LRS), whose installation steps are described [here](TRAXLRS).
+
 ### Test plan
 
 This BB will mostly work with Unity in runtime.\

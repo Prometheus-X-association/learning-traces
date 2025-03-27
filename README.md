@@ -2,12 +2,21 @@
 
 This BB contains a Unity package, which help the implementation and creation of learning traces in xAPI format. The main use case, is to track all events from an exercise in a 3D simulation and record it in a LRS.
 
+An optional LRS is also available [here](TRAXLRS) if one is needed.
+
+---
+
 ## Design Document
 See the design document [here](docs/design-document.md).
 
-## Building instructions
-_Describe how to build the BB._
+---
 
+## Building instructions
+
+### Optional LRS
+_Building instructions of the optional LRS are described [here](TRAXLRS/README.md#configuration-optional)_
+
+### Unity package
 Download Unity Hub at : [download hub](https://unity.com/download).\
 From this launcher download an Unity version (at least 2023.2.x).
 
@@ -30,14 +39,21 @@ This object will allow you to set your targeted LRS database.\
 
 To finish setup, put the PXRLTManager prefab in "PXRLT/Runtime/Prefabs/" and reference your newly created LRS configuration in it.
 
-## Running instructions
-_Describe how to run the BB._
+---
 
+## Running instructions
+
+### Optional LRS
+_Running instructions of the optional LRS are described [here](TRAXLRS/README.md#configuration-optional)_
+
+### Unity package
 As only running instructions, run unity simulation.
 
-## Example usage
-_Describe how to check some basic functionality of the BB._
+---
 
+## Example usage
+
+### Unity package
 
 This example will show how to send a initialized trace in an LRS. 
 Language available (English, French, German, Spanish)
@@ -326,6 +342,7 @@ PXRLTManager.Instance.ClearUserInformation();
 }
 ```
 
+---
 
 ## Unit testing
 ### Setup test environment
@@ -342,6 +359,8 @@ Start unity simulation, and click on the "Start Test" button to run your unit te
 The expected results are in the Unity console. All tests can be success or fail.
 
 ![image](./READ_ME-resources/UnitTest.png)
+
+---
 
 ## Component-level testing
 

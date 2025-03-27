@@ -1,0 +1,17 @@
+services:
+  app:
+    volumes:
+      - ./app:/var/www/app
+      - ./routes:/var/www/routes
+      - ./resources:/var/www/resources
+      - ./public:/var/www/public
+      - ./storage:/var/www/storage
+      - ./bootstrap:/var/www/bootstrap
+      - ./config:/var/www/config
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+
+  nginx:
+    volumes:
+      - ./public:/var/www/public
+      - ./Docker/confs/nginx.conf:/etc/nginx/conf.d/default.conf:ro

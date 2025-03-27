@@ -29,7 +29,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-interaction
+#RUN composer install --no-interaction
 
 # Build frontend assets
 #RUN npm install && npm run build
@@ -39,7 +39,7 @@ RUN chown -R www-data:www-data /var/www storage bootstrap/cache \
 && chmod -R 775 storage bootstrap/cache
 
 # Entrypoint
-COPY entrypoint.sh /entrypoint.sh
+COPY ./Docker/scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 CMD ["/entrypoint.sh"]

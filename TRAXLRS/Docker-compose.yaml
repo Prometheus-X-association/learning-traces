@@ -1,15 +1,14 @@
-version: "3.8"
-
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Docker/app/Dockerfile
     container_name: trax_lrs_app
-    volumes:
-      - .:/app
-    ports:
-      - "9000:9000"  # Pour PHP-FPM (interne)
+    expose:
+      - "9000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: db
@@ -22,23 +21,26 @@ services:
     image: nginx:latest
     container_name: trax_lrs_nginx
     ports:
-      - "8000:80"  # Expose vers l'extérieur
-    volumes:
-      - .:/var/www
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - "8000:80"
     depends_on:
       - app
 
   db:
     image: postgres:15
-    restart: always
     container_name: trax_lrs_db
+    restart: always
     environment:
       POSTGRES_DB: trax
       POSTGRES_USER: traxuser
       POSTGRES_PASSWORD: traxpass
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U traxuser -d trax"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
 volumes:
   db_data:
