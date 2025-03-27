@@ -44,7 +44,7 @@ To finish setup, put the PXRLTManager prefab in "PXRLT/Runtime/Prefabs/" and ref
 ## Running instructions
 
 ### Optional LRS
-_Running instructions of the optional LRS are described [here](TRAXLRS/README.md#configuration-optional)_
+_Running instructions of the optional LRS are described [here](TRAXLRS/README.md#building-and-launching-the-project)_
 
 ### Unity package
 As only running instructions, run unity simulation.
