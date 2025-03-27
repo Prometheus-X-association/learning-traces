@@ -198,13 +198,15 @@ namespace PXRLT
             statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
-            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrWhiteSpace(_lmsSessionName))
             {
+                statement.Context.Extensions = new Dictionary<string, string>();
                 statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
             }
             if (contextExtensions != null)
             {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
                 {
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -243,7 +245,6 @@ namespace PXRLT
             statement.Context.Registration = activity.RegistrationId;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
-            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(_lmsSessionName))
             {
                 statement.Context.Extensions = new Dictionary<string, string>();
@@ -251,6 +252,8 @@ namespace PXRLT
             }
             if (contextExtensions != null)
             {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
                 {
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -297,7 +300,6 @@ namespace PXRLT
             statement.Context.Registration = activity.RegistrationId;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
-            statement.Context.Extensions = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(_lmsSessionName))
             {
                 statement.Context.Extensions = new Dictionary<string, string>();
@@ -305,6 +307,8 @@ namespace PXRLT
             }
             if (contextExtensions != null)
             {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
                 {
                     statement.Context.Extensions[extension.Key] = extension.Value;
