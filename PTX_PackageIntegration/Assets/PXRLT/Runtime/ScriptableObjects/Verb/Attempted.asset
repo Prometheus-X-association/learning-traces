@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 059753923fd914d4badef79c2977cabb, type: 3}
-  m_Name: Completed
+  m_Name: Attempted
   m_EditorClassIdentifier: 
-  _name: completed
-  _id: http://adlnet.gov/expapi/verbs/completed
+  _name: attempted
+  _id: http://adlnet.gov/expapi/verbs/attempted
   _displayPairs:
   - _language: {fileID: 11400000, guid: ee39754cbc1cd9a4fb55c1d54d5cb544, type: 2}
-    _value: completed
+    _value: attempted
   - _language: {fileID: 11400000, guid: 5a9cd5897de4c7c4cb5485c937ef8400, type: 2}
-    _value: "a complet\xE9"
+    _value: "a tent\xE9"
   - _language: {fileID: 11400000, guid: d262c86361d0ec6479616be6b4614937, type: 2}
-    _value: beendete
+    _value: versucht
   - _language: {fileID: 11400000, guid: 9c3ab723465482c438818d25101e4158, type: 2}
-    _value: "complet\xF3"
+    _value: atentado

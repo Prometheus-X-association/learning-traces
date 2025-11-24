@@ -32,10 +32,6 @@ namespace PXRLT
         private List<Verb> _verbsAvailable = new List<Verb>();
 
         /// <summary>
-        /// (Optionnal) LMS session name, use to link your trace with LMS
-        /// </summary>
-        private string _lmsSessionName = string.Empty;
-        /// <summary>
         /// XAPI context activities
         /// </summary>
         private XAPI.ContextActivities _currentContext = null;
@@ -45,32 +41,19 @@ namespace PXRLT
         private XAPI.Actor _currentActor = new XAPI.Actor();
 
         /// <summary>
-        /// Verb : Completed XAPI
-        /// </summary>
-        private Verb _completeVerb = null;
-        /// <summary>
-        /// Verb : Initialized XAPI
-        /// </summary>
-        private Verb _initializeVerb = null;
-        /// <summary>
-        /// Verb : Interacted XAPI
-        /// </summary>
-        private Verb _interactVerb = null;
-
-        /// <summary>
         /// Send an event when a trace is sent
         /// </summary>
         private bool _logTrace = false;
 
         #region Accessors
         /// <summary>
-        /// Getter for _lmsSessionName
-        /// </summary>
-        public string LMSSessionName => _lmsSessionName;
-        /// <summary>
         /// Getter for _languagesAvailable
         /// </summary>
         public List<LanguageData> LanguagesAvailable => _languagesAvailable;
+        /// <summary>
+        /// Getter for _verbsAvailable
+        /// </summary>
+        internal List<Verb> VerbsAvailable => _verbsAvailable;
         /// <summary>
         /// Getter for _logTrace
         /// (only available in assembly)
@@ -86,6 +69,7 @@ namespace PXRLT
         internal UnityEvent<XAPI.StatementStoredResponse> OnTraceSend = new UnityEvent<XAPI.StatementStoredResponse>();
         #endregion
 
+        #region Unity Methods
         /// <summary>
         /// Unity Awake methods
         /// </summary>
@@ -95,29 +79,52 @@ namespace PXRLT
             {
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
-
-                _completeVerb = _verbsAvailable.Find(x => x.Name == "completed");
-                _initializeVerb = _verbsAvailable.Find(x => x.Name == "initialized");
-                _interactVerb = _verbsAvailable.Find(x => x.Name == "interacted");
             }
             else
             {
                 Destroy(this);
             }
         }
+        #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Initialize user information
+        /// </summary>
+        /// <param name="isAnonymous"></param>
+        /// <param name="userInformation"></param>
+        public void InitializeUserInformation(UserInformation userInformation = null)
+        {
+            Log("Initialize user informations for xAPI purposes");
+            if (userInformation == null)
+            {
+                _currentActor = XAPI.Actor.FromMailbox("anonymous@domain.com");
+                _currentActor.Name = System.Guid.NewGuid().ToString();
+            }
+            else
+            {
+                _currentActor = XAPI.Actor.FromMailbox(userInformation.Email);
+                _currentActor.Name = userInformation.Fullname;
+            }
+        }
+
+        /// <summary>
+        /// Clear user information
+        /// </summary>
+        public void ClearUserInformation()
+        {
+            Log("Clear user informations for xAPI purposes");
+            _currentActor = null;
+        }
+
         /// <summary>
         /// Initialize context activity 
         /// </summary>
         /// <param name="lmsSessionName"></param>
         /// <param name="contextActivities"></param>
-        public void InitializeContext(PXRLT.ContextActivities contextActivities, string lmsSessionName = null)
+        public void InitializeContext(PXRLT.ContextActivities contextActivities)
         {
-            if (lmsSessionName == null)
-                _lmsSessionName = string.Empty;
-            else
-                _lmsSessionName = lmsSessionName;
+            Log("Initialize context activities for xAPI purposes");
             _currentContext = new XAPI.ContextActivities();
 
             if (string.IsNullOrWhiteSpace(contextActivities.ParentActivityId))
@@ -139,80 +146,23 @@ namespace PXRLT
         }
 
         /// <summary>
-        /// Initialize user information
-        /// </summary>
-        /// <param name="isAnonymous"></param>
-        /// <param name="userInformation"></param>
-        public void InitializeUserInformation(bool isAnonymous, UserInformation userInformation = null)
-        {
-            if (isAnonymous)
-            {
-                _currentActor = XAPI.Actor.FromMailbox("anonymous@domain.com");
-                _currentActor.Name = System.Guid.NewGuid().ToString();
-            }
-            else
-            {
-                _currentActor = XAPI.Actor.FromMailbox(userInformation.Email);
-                _currentActor.Name = userInformation.Fullname;
-            }
-        }
-
-        /// <summary>
         /// Clear context activity
         /// </summary>
         public void ClearContext()
         {
             Log("Clear context activities for xAPI purposes");
             _currentContext = null;
-            _lmsSessionName = string.Empty;
-        }
-
-        /// <summary>
-        /// Clear user information
-        /// </summary>
-        public void ClearUserInformation()
-        {
-            Log("Clear user informations for xAPI purposes");
-            _currentActor = null;
         }
 
         /// <summary>
         /// Send trace with initialized verb
         /// It's the beginning of exercise traces
+        /// It's the beginning of a session
         /// </summary>
         /// <param name="activity"></param>
         public void SendInitializeTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
         {
-            XAPI.Verb verb = _initializeVerb.CreateVerb();
-
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}");
-            XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
-            currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/simulation";
-            AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
-            currentActivity.Definition = currentActivityMetaData;
-
-            XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
-            statement.Context = new XAPI.Context();
-            statement.Context.Registration = activity.RegistrationId;
-            statement.Context.Platform = activity.PlatformName;
-            statement.Context.Language = activity.LanguageUsed.Name;
-            if (_currentContext != null)
-                statement.Context.ContextActivities = _currentContext;
-            if (!string.IsNullOrWhiteSpace(_lmsSessionName))
-            {
-                statement.Context.Extensions = new Dictionary<string, string>();
-                statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
-            }
-            if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
-                foreach (var extension in contextExtensions)
-                {
-                    statement.Context.Extensions[extension.Key] = extension.Value;
-                }
-            }
-
+            XAPI.Statement statement = CreateInitializeTrace(activity, contextExtensions);
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
                 Log($"Sent beginning statement!  LRS stored with ID: {res.StatementID}");
@@ -222,15 +172,140 @@ namespace PXRLT
         }
 
         /// <summary>
-        /// Send trace for event
+        /// Create a trace with initialized verb
+        /// It's the beginning of a session
         /// </summary>
         /// <param name="activity"></param>
-        /// <param name="eventToSend"></param>
-        public void SendEventTrace(Activity activity, Event eventToSend, Dictionary<string, string> contextExtensions = null)
+        /// <param name="contextExtensions"></param>
+        /// <returns></returns>
+        public XAPI.Statement CreateInitializeTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
         {
-            XAPI.Verb verb = _interactVerb.CreateVerb();
+            /// Initialize verb part
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("initialized")))
+            {
+                LogError("Initialized verb not found");
+                return null;
+            }
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("initialized")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}/events/{eventToSend.Id}");
+            /// Initialize Object part
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}");
+            XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
+            currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/course";
+            AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
+            currentActivity.Definition = currentActivityMetaData;
+
+            /// Fill statement
+            XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
+            statement.Context = new XAPI.Context();
+            statement.Context.Platform = activity.PlatformName;
+            statement.Context.Language = activity.LanguageUsed.Name;
+            if (_currentContext != null)
+                statement.Context.ContextActivities = _currentContext;
+            if (contextExtensions != null)
+            {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
+                foreach (var extension in contextExtensions)
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+            }
+            return statement;
+        }
+
+        /// <summary>
+        /// Send trace with attempted verb
+        /// It's the beginning of an exercise in session
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="exercise"></param>
+        /// <param name="contextExtensions"></param>
+        public void SendAttemptTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
+        {
+            XAPI.Statement statement = CreateAttemptTrace(activity, exercise, contextExtensions);
+            XAPI.XAPIWrapper.SendStatement(statement, res =>
+            {
+                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceSend?.Invoke(res);
+            });
+        }
+        /// <summary>
+        /// Create a trace with attempted verb
+        /// It's the beginning of an exercise in session
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="exercise"></param>
+        /// <param name="contextExtensions"></param>
+        /// <returns></returns>
+        public XAPI.Statement CreateAttemptTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
+        {
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("attempted")))
+            {
+                LogError("Attempted verb not found");
+                return null;
+            }
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("attempted")).CreateVerb();
+
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}");
+            XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
+            currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/exercise";
+            AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
+            currentActivity.Definition = currentActivityMetaData;
+
+            XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
+            statement.Context = new XAPI.Context();
+            statement.Context.Registration = exercise.RegistrationId;
+            statement.Context.Platform = activity.PlatformName;
+            statement.Context.Language = activity.LanguageUsed.Name;
+            if (_currentContext != null)
+                statement.Context.ContextActivities = _currentContext;
+            if (contextExtensions != null)
+            {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
+                foreach (var extension in contextExtensions)
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+            }
+            return statement;
+        }
+
+        /// <summary>
+        /// Send trace with interacted verb
+        /// This define a new event to send 
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="exercise"></param>
+        /// <param name="eventToSend"></param>
+        /// <param name="contextExtensions"></param>
+        public void SendEventTrace(Activity activity, Exercise exercise, Event eventToSend, Dictionary<string, string> contextExtensions = null)
+        {
+            XAPI.Statement statement = CreateInteractTrace(activity, exercise, eventToSend, contextExtensions);
+            XAPI.XAPIWrapper.SendStatement(statement, res =>
+            {
+                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceSend?.Invoke(res);
+            });
+        }
+
+        /// <summary>
+        /// Create a trace with interacted verb
+        /// This define a new event to send 
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="exercise"></param>
+        /// <param name="eventToSend"></param>
+        /// <param name="contextExtensions"></param>
+        public XAPI.Statement CreateInteractTrace(Activity activity, Exercise exercise, Event eventToSend, Dictionary<string, string> contextExtensions = null)
+        {
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("interacted")))
+            {
+                LogError("Interacted verb not found");
+                return null;
+            }
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("interacted")).CreateVerb();
+
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}/event/{eventToSend.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/interaction";
             AddNameAndDefinition(ref currentActivityMetaData, eventToSend.NamePairs, new List<LanguagePair>());
@@ -242,14 +317,11 @@ namespace PXRLT
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Result = result;
             statement.Context = new XAPI.Context();
-            statement.Context.Registration = activity.RegistrationId;
+            statement.Context.Registration = exercise.RegistrationId;
+            statement.Context.Platform = activity.PlatformName;
+            statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
-            if (!string.IsNullOrEmpty(_lmsSessionName))
-            {
-                statement.Context.Extensions = new Dictionary<string, string>();
-                statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
-            }
             if (contextExtensions != null)
             {
                 if (statement.Context.Extensions == null)
@@ -259,7 +331,20 @@ namespace PXRLT
                     statement.Context.Extensions[extension.Key] = extension.Value;
                 }
             }
+            return statement;
+        }
 
+        /// <summary>
+        /// Send trace with completed verb
+        /// It's the ending of an exercise traces
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="exercise"></param>
+        /// <param name="result"></param>
+        /// <param name="contextExtensions"></param>
+        public void SendResultTrace(Activity activity, Exercise exercise, Result result, Dictionary<string, string> contextExtensions = null)
+        {
+            XAPI.Statement statement = CreateCompleteTrace(activity, exercise, result, contextExtensions);
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
                 Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
@@ -269,16 +354,23 @@ namespace PXRLT
         }
 
         /// <summary>
-        /// Send trace with completed verb
+        /// Create a trace with completed verb
         /// It's the ending of an exercise traces
         /// </summary>
         /// <param name="activity"></param>
+        /// <param name="exercise"></param>
         /// <param name="result"></param>
-        public void SendResultTrace(Activity activity, Result result, Dictionary<string, string> contextExtensions = null)
+        /// <param name="contextExtensions"></param>
+        public XAPI.Statement CreateCompleteTrace(Activity activity, Exercise exercise, Result result, Dictionary<string, string> contextExtensions = null)
         {
-            XAPI.Verb verb = _completeVerb.CreateVerb();
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("completed")))
+            {
+                LogError("Completed verb not found");
+                return null;
+            }
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("completed")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/exercise";
             AddNameAndDefinition(ref currentActivityMetaData, result.NamePairs, new List<LanguagePair>());
@@ -292,19 +384,14 @@ namespace PXRLT
             Dictionary<string, float> sensorsResult = new Dictionary<string, float>();
             foreach (ResultSensor sensor in result.Sensors)
                 sensorsResult[sensor.Id] = sensor.Value;
-            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.ExerciseId}/sensors/score", sensorsResult);
+            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/sensors/score", sensorsResult);
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Result = xapiResult;
             statement.Context = new XAPI.Context();
-            statement.Context.Registration = activity.RegistrationId;
+            statement.Context.Registration = exercise.RegistrationId;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
-            if (!string.IsNullOrEmpty(_lmsSessionName))
-            {
-                statement.Context.Extensions = new Dictionary<string, string>();
-                statement.Context.Extensions.Add("https://w3id.org/xapi/cmi5/context/extensions/sessionid", _lmsSessionName);
-            }
             if (contextExtensions != null)
             {
                 if (statement.Context.Extensions == null)
@@ -314,18 +401,69 @@ namespace PXRLT
                     statement.Context.Extensions[extension.Key] = extension.Value;
                 }
             }
+            return statement;
+        }
 
+        /// <summary>
+        /// Send trace with terminated verb
+        /// It's the ending of the session
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="contextExtensions"></param>
+        public void SendTerminateTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
+        {
+            XAPI.Statement statement = CreateTerminateTrace(activity, contextExtensions);
             XAPI.XAPIWrapper.SendStatement(statement, res =>
             {
-                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                Log($"Sent statement! LRS stored with ID: {res.StatementID}");
                 if (_logTrace)
                     OnTraceSend?.Invoke(res);
             });
         }
-        #endregion
 
         /// <summary>
-        /// 
+        /// Create a trace with terminated verb
+        /// It's the ending of the session
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="contextExtensions"></param>
+        public XAPI.Statement CreateTerminateTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
+        {
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("terminated")))
+            {
+                LogError("Terminated verb not found");
+                return null;
+            }
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("terminated")).CreateVerb();
+
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}");
+            XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
+            currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/simulation";
+            AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
+            currentActivity.Definition = currentActivityMetaData;
+
+            XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
+            statement.Context = new XAPI.Context();
+            if (_currentContext != null)
+                statement.Context.ContextActivities = _currentContext;
+            if (contextExtensions != null)
+            {
+                if (statement.Context.Extensions == null)
+                    statement.Context.Extensions = new Dictionary<string, string>();
+                foreach (var extension in contextExtensions)
+                {
+                    statement.Context.Extensions[extension.Key] = extension.Value;
+                }
+            }
+            return statement;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Name and definition
         /// </summary>
         /// <param name="metaData"></param>
         /// <param name="namePairs"></param>
@@ -345,6 +483,8 @@ namespace PXRLT
                 metaData.DescriptionPairs[descriptionPair.Language.Name] = descriptionPair.Value;
             }
         }
+
+        #endregion
 
         #region Log
         /// <summary>

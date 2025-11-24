@@ -1,0 +1,86 @@
+{
+   "actor":{
+      "mbox":"mailto:firstname.lastname@mimbus.com",
+      "objectType":"Agent",
+      "name":"Firstname Lastname"
+   },
+   "verb":{
+      "id":"http://adlnet.gov/expapi/verbs/completed",
+      "display":{
+         "en-US":"completed",
+         "fr-FR":"complété",
+      }
+   },
+   "object":{
+      "id":"https://navy.mil/netc/xapi/activities/simulations/{SESSION_ID}/exercise/{EXERCISE_TAG}",
+      "definition":{
+         "name":{
+            "en-US":"{EXERCISE_NAME} (US)",
+            "fr-FR":"{EXERCISE_NAME} (FR)",
+         },
+         "description":{
+            "en-US":"{EXERCISE_DESC} (US)",
+            "fr-FR":"{EXERCISE_DESC} (FR)",
+         },
+         "type":"http://adlnet.gov/expapi/activities/simulation"
+      },
+      "objectType":"Activity"
+   },
+   "result":{
+      "success": true,
+      "completion": true,
+      "response":"",
+      "score":{
+         "scaled":1.0
+      },
+      "extensions":{
+         "https://navy.mil/netc/xapi/activities/simulations/{SESSION_ID}/exercise/{EXERCISE_TAG}/sensors/{SENSOR_TAG}":{
+            "score":{
+                min : 0.5,
+                target : 0.8,
+                max : 1.0
+            },
+            "name":{
+                "en-US":"{SENSOR_NAME} (US)",
+                "fr-FR":"{SENSOR_NAME} (FR)",
+            },
+            "description":{
+                "en-US":"{SENSOR_DESC} (US)",
+                "fr-FR":"{SENSOR_DESC} (FR)",
+            },
+            "compute_method": MAX_TO_TARGET
+         },
+      }
+   },
+   "context":{
+      "registration":"{EXERCISE_ATTEMPT_ID}",
+      "contextActivities":{
+         "category":[
+            {
+               "id":"https://w3id.org/xapi/simulation/v1.0",
+               "definition":{
+                  "name":{
+                     "en-US":"Virtual reality simulator (US)",
+                     "fr-FR":"Simulateur en réalité virtuelle (FR)",
+                  },
+                  "description":{
+                     "en-US":"{PRODUCT_NAME} : Virtual reality simulator description (US)",
+                     "fr-FR":"{PRODUCT_NAME} : Description du simulateur en réalité virtuelle  (FR)",                     
+                  },
+                  "type":"http://id.tincanapi.com/activitytype/category"
+               },
+               "objectType":"Activity"
+            }
+         ]
+      }
+   },
+   "timestamp":"2025-11-05T14:25:20.202Z",
+    "stored": "2025-11-05T14:27:01.588803Z",
+    "authority": {
+        "account": {
+            "name": "api",
+            "homePage": "http://traxlrs.com"
+        }
+    },
+   "version":"1.0.0"
+}

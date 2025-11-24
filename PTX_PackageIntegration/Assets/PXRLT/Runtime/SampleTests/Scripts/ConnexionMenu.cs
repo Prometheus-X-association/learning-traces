@@ -61,12 +61,18 @@ namespace PXRLT.Test
             _uiManager.UserInformation.Fullname = _fullNameField.text;
             _uiManager.UserInformation.Email = _emailAdressField.text;
 
-            _manager.InitializeContext(_uiManager.ContextActivities, _lmsSessionName.text);
-            _manager.InitializeUserInformation(_sendAnonymousTracksToggle.isOn, _uiManager.UserInformation);
+            _manager.InitializeContext(_uiManager.ContextActivities);
+            if (_sendAnonymousTracksToggle.isOn)
+            {
+                _manager.InitializeUserInformation(null);
+            }
+            else
+            {
+                _manager.InitializeUserInformation(_uiManager.UserInformation);
+            }
 
             _uiManager.CurrentActivity = new Activity();
-            _uiManager.CurrentActivity.ExerciseId = _exerciseIDField.text;
-            _uiManager.CurrentActivity.RegistrationId = System.Guid.NewGuid().ToString();
+            _uiManager.CurrentActivity.SessionId = _exerciseIDField.text;
             _uiManager.CurrentActivity.PlatformName = Application.productName;
             _uiManager.CurrentActivity.LanguageUsed = _manager.LanguagesAvailable.First();
             foreach (LanguageData language in _manager.LanguagesAvailable)

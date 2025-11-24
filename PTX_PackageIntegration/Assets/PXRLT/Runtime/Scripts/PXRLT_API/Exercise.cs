@@ -2,19 +2,17 @@ using System.Collections.Generic;
 
 namespace PXRLT
 {
-    /// <summary>
-    /// Definition of subresult score
-    /// </summary>
-    public class ResultSensor
+    public class Exercise
     {
         /// <summary>
-        /// Unique key defining ths sensor
+        /// ID, it should be unique for each new exercise you want to make
         /// </summary>
-        private string _id = string.Empty;
+        private string _id;
         /// <summary>
-        /// Value of the sensor
+        /// Registration ID, it's a ID which define an instance of an exercise
+        /// It should be the same from attempt trace to complete trace
         /// </summary>
-        private float _value = 0.0f;
+        private string _registrationId;
         /// <summary>
         /// Name of the activity for each available language
         /// </summary>
@@ -24,15 +22,14 @@ namespace PXRLT
         /// </summary>
         private List<LanguagePair> _descriptionPairs = new List<LanguagePair>();
 
-        #region Accessors
         /// <summary>
-        /// Getter for _key
+        /// Getter / Setter for _id
         /// </summary>
-        public string Id { get { return _id; } }
+        public string Id { get { return _id; } set { _id = value; } }
         /// <summary>
-        /// Getter for _value
+        /// Getter / Setter for _registrationId
         /// </summary>
-        public float Value { get { return _value; } }
+        public string RegistrationId { get { return _registrationId; } set { _registrationId = value; } }
         /// <summary>
         /// Getter / Setter for _namePairs
         /// </summary>
@@ -41,17 +38,5 @@ namespace PXRLT
         /// Getter / Setter for _descriptionPairs
         /// </summary>
         public List<LanguagePair> DescriptionPairs { get { return _descriptionPairs; } set { _descriptionPairs = value; } }
-        #endregion
-
-        /// <summary>
-        /// Constructor of result sensor
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public ResultSensor(string id, float value)
-        {
-            _id = id;
-            _value = value;
-        }
     }
 }

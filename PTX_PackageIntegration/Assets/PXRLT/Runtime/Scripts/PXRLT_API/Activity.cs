@@ -9,14 +9,9 @@ namespace PXRLT
     public class Activity
     {
         /// <summary>
-        /// Exercise ID, it should be unique for each new exercise you want to make
+        /// ID, it should be unique for each new activity you want to make
         /// </summary>
-        private string _exerciseId;
-        /// <summary>
-        /// Registration ID, it's a ID which define an instance of an exercise
-        /// It should be the same from initilization trace to completion trace
-        /// </summary>
-        private string _registrationId;
+        private string _sessionId;
         /// <summary>
         /// Name of the project or application you want to link your traces
         /// </summary>
@@ -36,13 +31,9 @@ namespace PXRLT
 
         #region Accessors
         /// <summary>
-        /// Getter / Setter for _exerciseId
+        /// Getter / Setter for _sessionId
         /// </summary>
-        public string ExerciseId { get { return _exerciseId; } set { _exerciseId = value; } }
-        /// <summary>
-        /// Getter / Setter for _registrationId
-        /// </summary>
-        public string RegistrationId { get { return _registrationId; } set { _registrationId = value; } }
+        public string SessionId { get { return _sessionId; } set { _sessionId = value; } }
         /// <summary>
         /// Getter / Setter for _platformName
         /// </summary>

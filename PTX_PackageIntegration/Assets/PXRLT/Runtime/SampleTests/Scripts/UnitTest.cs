@@ -2,13 +2,20 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PXRLT.Test
 {
     public class UnitTest : MonoBehaviour
     {
         [SerializeField]
+        private Button _button = null;
+
+        [Header("Test files")]
+        [SerializeField]
         private TextAsset _initializedTraceFile = null;
+        [SerializeField]
+        private TextAsset _attemptedTraceFile = null;
         [SerializeField]
         private TextAsset _eventSuccessTraceFile = null;
         [SerializeField]
@@ -19,6 +26,8 @@ namespace PXRLT.Test
         private TextAsset _eventErrorTraceFile = null;
         [SerializeField]
         private TextAsset _resultTraceFile = null;
+        [SerializeField]
+        private TextAsset _terminatedTraceFile = null;
 
         private bool _waitResponseResult = false;
         private TextAsset _currentTraceFile = null;
@@ -31,6 +40,7 @@ namespace PXRLT.Test
 
         public void RunTest()
         {
+            _button.interactable = false;
             StartCoroutine(RunTestCoroutine());
         }
 
@@ -55,10 +65,8 @@ namespace PXRLT.Test
 
             // Creation of the activity
             Activity activity = new Activity();
-            // id : Name of your exercise, unique for each one
-            activity.ExerciseId = "EXERCISE_ID";
-            // id : GUID to this linked trace to other from the same exercise
-            activity.RegistrationId = System.Guid.Empty.ToString(); //(REGISTRATION_ID)
+            // id : Name of your session, unique for each one
+            activity.SessionId = "SESSION_ID";
             // Name of your project
             activity.PlatformName = "NAME_OF_YOUR_PLATFORM";
             // language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
@@ -69,10 +77,23 @@ namespace PXRLT.Test
                 activity.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
             }
 
+            // Creation of the exercise
+            Exercise exercise = new Exercise();
+            // id : Name of your exercise, unique for each one
+            exercise.Id = "EXERCISE_ID";
+            // id : GUID to this linked trace to other from the same exercise
+            exercise.RegistrationId = "00000000-0000-0000-0000-000000000000"; //(REGISTRATION_ID)
+            // language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
+            foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+            {
+                exercise.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+                exercise.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+            }
+
             // Initiliaze context on PXRLTManager
             PXRLTManager.Instance.InitializeContext(contextActivities);
             // Initiliaze user information on PXRLTManager
-            PXRLTManager.Instance.InitializeUserInformation(false, userInformation);
+            PXRLTManager.Instance.InitializeUserInformation(userInformation);
             #endregion
 
             #region Test Initiliaze trace
@@ -85,10 +106,20 @@ namespace PXRLT.Test
                 yield return null;
             #endregion
 
+            #region Test Attemped trace
+            // Send attempt trace
+            PXRLTManager.Instance.SendAttemptTrace(activity, exercise);
+            // Wait attempt trace
+            _currentTraceFile = _attemptedTraceFile;
+            _waitResponseResult = true;
+            while (_waitResponseResult)
+                yield return null;
+            #endregion
+
             #region Test event success trace
             // Create Success event
             Event evtSuccess = CreateEvent(EventStatus.SUCCESS, $"EVENT_SUCCESS");
-            PXRLTManager.Instance.SendEventTrace(activity, evtSuccess);
+            PXRLTManager.Instance.SendEventTrace(activity, exercise, evtSuccess);
             // Wait success event trace
             _currentTraceFile = _eventSuccessTraceFile;
             _waitResponseResult = true;
@@ -99,7 +130,7 @@ namespace PXRLT.Test
             #region Test event information trace
             // Create Information event
             Event evtInformation = CreateEvent(EventStatus.INFO, $"EVENT_INFO");
-            PXRLTManager.Instance.SendEventTrace(activity, evtInformation);
+            PXRLTManager.Instance.SendEventTrace(activity, exercise, evtInformation);
             // Wait success event trace
             _currentTraceFile = _eventInformationTraceFile;
             _waitResponseResult = true;
@@ -110,7 +141,7 @@ namespace PXRLT.Test
             #region Test event warning trace
             // Create Warning event
             Event evtWarning = CreateEvent(EventStatus.WARNING, $"EVENT_WARNING");
-            PXRLTManager.Instance.SendEventTrace(activity, evtWarning);
+            PXRLTManager.Instance.SendEventTrace(activity, exercise, evtWarning);
             // Wait success event trace
             _currentTraceFile = _eventWarningTraceFile;
             _waitResponseResult = true;
@@ -121,7 +152,7 @@ namespace PXRLT.Test
             #region Test event error trace
             // Create error event
             Event evtError = CreateEvent(EventStatus.ERROR, $"EVENT_ERROR");
-            PXRLTManager.Instance.SendEventTrace(activity, evtError);
+            PXRLTManager.Instance.SendEventTrace(activity, exercise, evtError);
             // Wait success event trace
             _currentTraceFile = _eventErrorTraceFile;
             _waitResponseResult = true;
@@ -138,13 +169,25 @@ namespace PXRLT.Test
             foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
                 result.NamePairs.Add(new LanguagePair(language, $"Result for {language.FullName}"));
             result.Sensors.Add(new ResultSensor("SENSOR_ID", 0.5f));
-            PXRLTManager.Instance.SendResultTrace(activity, result);
+            PXRLTManager.Instance.SendResultTrace(activity, exercise, result);
             // Wait success event trace
             _currentTraceFile = _resultTraceFile;
             _waitResponseResult = true;
             while (_waitResponseResult)
                 yield return null;
             #endregion
+
+            #region Test terminated trace
+            // Send Initialize trace
+            PXRLTManager.Instance.SendTerminateTrace(activity);
+            // Wait initialize trace
+            _currentTraceFile = _terminatedTraceFile;
+            _waitResponseResult = true;
+            while (_waitResponseResult)
+                yield return null;
+            #endregion
+
+            _button.interactable = true;
         }
 
         private Event CreateEvent(EventStatus status, string id)
@@ -162,6 +205,8 @@ namespace PXRLT.Test
             // Timestamp is created when you send it
             // for testing purpose we need to reset it
             response.Statement.Timestamp = "";
+            
+            
             string serializedStatement = JsonConvert.SerializeObject(response.Statement);
 
             if (_currentTraceFile == null)

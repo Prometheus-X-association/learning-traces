@@ -25,7 +25,9 @@ namespace PXRLT.Test
         [SerializeField]
         private Slider _sensorsValue3 = null;
 
-        private void Start()
+        private Exercise _runningExercise = null;
+
+        private void Awake()
         {
             _manager = PXRLTManager.Instance;
             if (_manager == null)
@@ -37,12 +39,37 @@ namespace PXRLT.Test
 
         private void OnEnable()
         {
+            _uiManager.CurrentExercise = new Exercise();
+            _uiManager.CurrentExercise.Id = System.Guid.NewGuid().ToString();
+            _uiManager.CurrentExercise.RegistrationId = System.Guid.NewGuid().ToString();
+            foreach (LanguageData language in _manager.LanguagesAvailable)
+            {
+                _uiManager.CurrentExercise.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+                _uiManager.CurrentExercise.DescriptionPairs.Add(new LanguagePair(language, $"Description for {language.FullName}"));
+            }
+            _manager.SendAttemptTrace(_uiManager.CurrentActivity, _uiManager.CurrentExercise);
+
             _sensorsName1.text = "First Sensors";
             _sensorsValue1.value = 0;
             _sensorsName2.text = "Second Sensors";
             _sensorsValue2.value = 0;
             _sensorsName3.text = "Third Sensors";
             _sensorsValue3.value = 0;
+
+            // Creation of the exercise
+            _runningExercise = new Exercise();
+            _runningExercise.Id = "EXERCISE_ID";
+            _runningExercise.RegistrationId = System.Guid.Empty.ToString(); //(REGISTRATION_ID)
+            foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+            {
+                _runningExercise.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+                _runningExercise.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            EndExercise();
         }
 
         public void SendSuccessEvent()
@@ -51,7 +78,7 @@ namespace PXRLT.Test
             foreach (LanguageData language in _manager.LanguagesAvailable)
                 eventNames.Add(new LanguagePair(language, $"Event success for {language.FullName}"));
             Event evt = CreateEvent(EventStatus.SUCCESS, $"EVENT_SUCCESS", eventNames);
-            _manager.SendEventTrace(_uiManager.CurrentActivity, evt);
+            _manager.SendEventTrace(_uiManager.CurrentActivity, _runningExercise, evt);
         }
 
         public void SendInformationEvent()
@@ -60,7 +87,7 @@ namespace PXRLT.Test
             foreach (LanguageData language in _manager.LanguagesAvailable)
                 eventNames.Add(new LanguagePair(language, $"Event information for {language.FullName}"));
             Event evt = CreateEvent(EventStatus.INFO, $"EVENT_INFORMATION", eventNames);
-            _manager.SendEventTrace(_uiManager.CurrentActivity, evt);
+            _manager.SendEventTrace(_uiManager.CurrentActivity, _runningExercise, evt);
         }
 
         public void SendWarningEvent()
@@ -69,7 +96,7 @@ namespace PXRLT.Test
             foreach (LanguageData language in _manager.LanguagesAvailable)
                 eventNames.Add(new LanguagePair(language, $"Event warning for {language.FullName}"));
             Event evt = CreateEvent(EventStatus.WARNING, $"EVENT_WARNING", eventNames);
-            _manager.SendEventTrace(_uiManager.CurrentActivity, evt);
+            _manager.SendEventTrace(_uiManager.CurrentActivity, _runningExercise, evt);
         }
 
         public void SendErrorEvent()
@@ -78,7 +105,7 @@ namespace PXRLT.Test
             foreach (LanguageData language in _manager.LanguagesAvailable)
                 eventNames.Add(new LanguagePair(language, $"Event error for {language.FullName}"));
             Event evt = CreateEvent(EventStatus.ERROR, $"EVENT_ERROR", eventNames);
-            _manager.SendEventTrace(_uiManager.CurrentActivity, evt);
+            _manager.SendEventTrace(_uiManager.CurrentActivity, _runningExercise, evt);
         }
 
         public void EndExercise()
@@ -93,8 +120,12 @@ namespace PXRLT.Test
             result.Sensors.Add(new ResultSensor(_sensorsName2.text, _sensorsValue2.value));
             result.Sensors.Add(new ResultSensor(_sensorsName3.text, _sensorsValue3.value));
 
-            _manager.SendResultTrace(_uiManager.CurrentActivity, result);
+            _manager.SendResultTrace(_uiManager.CurrentActivity, _runningExercise, result);
             _manager.ClearContext();
+
+            _manager.SendTerminateTrace(_uiManager.CurrentActivity);
+
+            _runningExercise = null;
         }
 
         private Event CreateEvent(EventStatus status, string id, List<LanguagePair> namePairs)

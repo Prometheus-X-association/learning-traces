@@ -1,7 +1,7 @@
 {
   "name": "com.ptx.xrtraces",
   "displayName": "PTX XR Learning Traces",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "unity": "2021.3",
   "description": "Learning traces in xAPI format",
   "keywords": [

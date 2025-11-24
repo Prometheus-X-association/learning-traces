@@ -81,16 +81,26 @@ Actor in xAPI format define the type of actor we want to link to our activity, f
 This class is a representation of xAPI.Activity.\
 It implements only the specific part we use for VR learning traces.
 
-Activity in xAPI format define the nature of our activity, it contains our exercise data like the ID of the exercise, the ID of this instance of the exercise (registration ID), the language used and the platform we use (name of the simulator or application).
+Activity in xAPI format define the nature of our activity, it contains our session data : the ID of the session, the language used and the platform we use (name of the simulator or application).
 
 | Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
-| ExerciseId         | Exercise unique ID                               | Get / Set |
-| RegistrationId     | Exercise registration instance ID                | Get / Set |
+| SessionId          | Session unique ID                                | Get / Set |
 | PlatformName       | Name of the application or simulation            | Get / Set |
 | LanguageUsed       | Language used by the user                        | Get / Set |
 | NamePairs          | Activity name by language list                   | Get / Set |
 | DescriptionPairs   | Activity description by language list            | Get / Set |
+
+### Exercise
+
+This class contains an instance of an exercise : ID of the exercise, the ID of this instance of the exercise (registration ID).
+
+| Public variables      | Description       | Accessibility |
+| --------------------- | ----------------- | ------- |
+| Id                 | Exercise unique ID                               | Get / Set |
+| RegistrationId     | Exercise registration instance ID                | Get / Set |
+| NamePairs          | Exercise name by language list                   | Get / Set |
+| DescriptionPairs   | Exercise description by language list            | Get / Set |
 
 ### Result
 
@@ -111,8 +121,10 @@ This class contains a key and a float value, it represents sub result in your ex
 
 | Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
-| Id          | Unique ID of this sensor        | Get only |
-| Value       | Score of the sensor              | Get only |
+| Id                 | Unique ID of this sensor                         | Get only  |
+| Value              | Score of the sensor                              | Get only  |
+| NamePairs          | Sensor name by language list                     | Get / Set |
+| DescriptionPairs   | Sensor description by language list              | Get / Set |
 
 ### Event
 
@@ -123,6 +135,18 @@ This class contains event data such has event type and a unique event key which 
 | Id                    | Unique ID of this event                                         | Get / Set |
 | EventStatus           | Event status (SUCCESS, INFO, WARNING, ERROR)                    | Get / Set |
 | NamePairs             | Event name by language list                                     | Get / Set |
+
+### Verb
+
+This class is a representation of xAPI.Verb.\
+It implements only the specific part we use for VR learning traces.
+
+| Public variables      | Description       | Accessibility |
+| --------------------- | ----------------- | ------- |
+| Name                  | Name of the verb                  | Get / Set |
+| Id                    | Id of the verb                    | Get / Set |
+| DisplayPairs          | Verb name by language list        | Get / Set |
+
 
 ## Setup
 
