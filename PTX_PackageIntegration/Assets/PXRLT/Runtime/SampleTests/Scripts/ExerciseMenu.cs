@@ -120,7 +120,7 @@ namespace PXRLT.Test
             result.Sensors.Add(new ResultSensor(_sensorsName2.text, _sensorsValue2.value));
             result.Sensors.Add(new ResultSensor(_sensorsName3.text, _sensorsValue3.value));
 
-            _manager.SendResultTrace(_uiManager.CurrentActivity, _runningExercise, result);
+            _manager.SendCompleteTrace(_uiManager.CurrentActivity, _runningExercise, result);
             _manager.ClearContext();
 
             _manager.SendTerminateTrace(_uiManager.CurrentActivity);

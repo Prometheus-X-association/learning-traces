@@ -63,10 +63,14 @@ namespace PXRLT
 
         #region Event
         /// <summary>
+        /// Event send when a trace is sent
+        /// </summary>
+        internal UnityEvent OnTraceSend = new UnityEvent();
+        /// <summary>
         /// Event send when a trace is sent and _logTrace is true
         /// (only available in assembly)
         /// </summary>
-        internal UnityEvent<XAPI.StatementStoredResponse> OnTraceSend = new UnityEvent<XAPI.StatementStoredResponse>();
+        internal UnityEvent<XAPI.StatementStoredResponse> OnTraceLog = new UnityEvent<XAPI.StatementStoredResponse>();
         #endregion
 
         #region Unity Methods
@@ -155,6 +159,22 @@ namespace PXRLT
         }
 
         /// <summary>
+        /// Generic way to send a statement
+        /// Can send specific statement created outside of this class
+        /// </summary>
+        /// <param name="statement"></param>
+        public void SendStatement(XAPI.Statement statement)
+        {
+            XAPI.XAPIWrapper.SendStatement(statement, res =>
+            {
+                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
+                if (_logTrace)
+                    OnTraceLog?.Invoke(res);
+                OnTraceSend?.Invoke();
+            });
+        }
+
+        /// <summary>
         /// Send trace with initialized verb
         /// It's the beginning of exercise traces
         /// It's the beginning of a session
@@ -163,12 +183,7 @@ namespace PXRLT
         public void SendInitializeTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Statement statement = CreateInitializeTrace(activity, contextExtensions);
-            XAPI.XAPIWrapper.SendStatement(statement, res =>
-            {
-                Log($"Sent beginning statement!  LRS stored with ID: {res.StatementID}");
-                if (_logTrace)
-                    OnTraceSend?.Invoke(res);
-            });
+            SendStatement(statement);
         }
 
         /// <summary>
@@ -222,13 +237,9 @@ namespace PXRLT
         public void SendAttemptTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Statement statement = CreateAttemptTrace(activity, exercise, contextExtensions);
-            XAPI.XAPIWrapper.SendStatement(statement, res =>
-            {
-                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
-                if (_logTrace)
-                    OnTraceSend?.Invoke(res);
-            });
+            SendStatement(statement);
         }
+
         /// <summary>
         /// Create a trace with attempted verb
         /// It's the beginning of an exercise in session
@@ -280,12 +291,7 @@ namespace PXRLT
         public void SendEventTrace(Activity activity, Exercise exercise, Event eventToSend, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Statement statement = CreateInteractTrace(activity, exercise, eventToSend, contextExtensions);
-            XAPI.XAPIWrapper.SendStatement(statement, res =>
-            {
-                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
-                if (_logTrace)
-                    OnTraceSend?.Invoke(res);
-            });
+            SendStatement(statement);
         }
 
         /// <summary>
@@ -342,15 +348,10 @@ namespace PXRLT
         /// <param name="exercise"></param>
         /// <param name="result"></param>
         /// <param name="contextExtensions"></param>
-        public void SendResultTrace(Activity activity, Exercise exercise, Result result, Dictionary<string, string> contextExtensions = null)
+        public void SendCompleteTrace(Activity activity, Exercise exercise, Result result, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Statement statement = CreateCompleteTrace(activity, exercise, result, contextExtensions);
-            XAPI.XAPIWrapper.SendStatement(statement, res =>
-            {
-                Log($"Sent statement!  LRS stored with ID: {res.StatementID}");
-                if (_logTrace)
-                    OnTraceSend?.Invoke(res);
-            });
+            SendStatement(statement);
         }
 
         /// <summary>
@@ -384,7 +385,7 @@ namespace PXRLT
             Dictionary<string, float> sensorsResult = new Dictionary<string, float>();
             foreach (ResultSensor sensor in result.Sensors)
                 sensorsResult[sensor.Id] = sensor.Value;
-            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/sensors/score", sensorsResult);
+            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}/sensors/score", sensorsResult);
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Result = xapiResult;
@@ -413,12 +414,7 @@ namespace PXRLT
         public void SendTerminateTrace(Activity activity, Dictionary<string, string> contextExtensions = null)
         {
             XAPI.Statement statement = CreateTerminateTrace(activity, contextExtensions);
-            XAPI.XAPIWrapper.SendStatement(statement, res =>
-            {
-                Log($"Sent statement! LRS stored with ID: {res.StatementID}");
-                if (_logTrace)
-                    OnTraceSend?.Invoke(res);
-            });
+            SendStatement(statement);
         }
 
         /// <summary>

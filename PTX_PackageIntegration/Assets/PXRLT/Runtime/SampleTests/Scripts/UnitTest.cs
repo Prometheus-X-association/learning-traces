@@ -35,7 +35,7 @@ namespace PXRLT.Test
         private void Start()
         {
             PXRLTManager.Instance.LogTrace = true;
-            PXRLTManager.Instance.OnTraceSend?.AddListener(CompareTraceValue);
+            PXRLTManager.Instance.OnTraceLog?.AddListener(CompareTraceValue);
         }
 
         public void RunTest()
@@ -169,7 +169,7 @@ namespace PXRLT.Test
             foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
                 result.NamePairs.Add(new LanguagePair(language, $"Result for {language.FullName}"));
             result.Sensors.Add(new ResultSensor("SENSOR_ID", 0.5f));
-            PXRLTManager.Instance.SendResultTrace(activity, exercise, result);
+            PXRLTManager.Instance.SendCompleteTrace(activity, exercise, result);
             // Wait success event trace
             _currentTraceFile = _resultTraceFile;
             _waitResponseResult = true;

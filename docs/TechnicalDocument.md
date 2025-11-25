@@ -16,9 +16,17 @@ This class is the entry point to make all different traces and send them.
 | ClearUserInformation      | Reset user informations |
 | InitializeContext         | Initialize context activity and lms session name, it defines the parent activity in case you have a LMS session to link to your activity or/and fill categories of the activity |
 | InitializeUserInformation | Initialize user informations for next traces. If isAnonymous is true, the email adress will always be equal to `anonymous@domain.com` and username will be randomly created.|
-| SendEventTrace            | Send a trace of an event in the targeted LRS |
+| SendStatement             | Send an xAPI statement |
 | SendInitializeTrace       | Send a trace of initialization in the targeted LRS |
-| SendResultTrace           | Send a trace of result in the LRS |
+| SendAttemptTrace          | Send a trace of attempt in the targeted LRS |
+| SendEventTrace            | Send a trace of an event in the targeted LRS |
+| SendCompleteTrace         | Send a trace of result in the LRS |
+| SendTerminateTrace        | Send a trace of terminate in the targeted LRS |
+| CreateInitializeTrace     | Create a trace of initialization in the targeted LRS |
+| CreateAttemptTrace        | Create a trace of attempt in the targeted LRS |
+| CreateEventTrace          | Create a trace of an event in the targeted LRS |
+| CreateCompleteTrace       | Create a trace of result in the LRS |
+| CreateTerminateTrace      | Create a trace of terminate in the targeted LRS |
 
 
 | Public variables      | Description       | Accessibility |
