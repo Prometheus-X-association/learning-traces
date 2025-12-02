@@ -236,7 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _button: {fileID: 316486079}
   _initializedTraceFile: {fileID: 4900000, guid: 8522035e7f9b10140a1eac04ed5867ba, type: 3}
-  _attemptedTraceFile: {fileID: 4900000, guid: ff5d89f22a7cdc943be1021ceaca928d, type: 3}
+  _launchedTraceFile: {fileID: 4900000, guid: ff5d89f22a7cdc943be1021ceaca928d, type: 3}
   _eventSuccessTraceFile: {fileID: 4900000, guid: 28ca5d5c61a67f14bbfdca1a29553945, type: 3}
   _eventInformationTraceFile: {fileID: 4900000, guid: 214365ce0bbb56247ad6579056f1b1ed, type: 3}
   _eventWarningTraceFile: {fileID: 4900000, guid: 30aa8d683f4d9854db691d4be6c08543, type: 3}

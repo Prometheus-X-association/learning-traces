@@ -234,9 +234,9 @@ namespace PXRLT
         /// <param name="activity"></param>
         /// <param name="exercise"></param>
         /// <param name="contextExtensions"></param>
-        public void SendAttemptTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
+        public void SendLaunchTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
         {
-            XAPI.Statement statement = CreateAttemptTrace(activity, exercise, contextExtensions);
+            XAPI.Statement statement = CreateLaunchTrace(activity, exercise, contextExtensions);
             SendStatement(statement);
         }
 
@@ -248,14 +248,14 @@ namespace PXRLT
         /// <param name="exercise"></param>
         /// <param name="contextExtensions"></param>
         /// <returns></returns>
-        public XAPI.Statement CreateAttemptTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
+        public XAPI.Statement CreateLaunchTrace(Activity activity, Exercise exercise, Dictionary<string, string> contextExtensions = null)
         {
-            if (!_verbsAvailable.Exists(x => x.Name.Equals("attempted")))
+            if (!_verbsAvailable.Exists(x => x.Name.Equals("launched")))
             {
-                LogError("Attempted verb not found");
+                LogError("Launched verb not found");
                 return null;
             }
-            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("attempted")).CreateVerb();
+            XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("launched")).CreateVerb();
 
             XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();

@@ -47,7 +47,7 @@ namespace PXRLT.Test
                 _uiManager.CurrentExercise.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
                 _uiManager.CurrentExercise.DescriptionPairs.Add(new LanguagePair(language, $"Description for {language.FullName}"));
             }
-            _manager.SendAttemptTrace(_uiManager.CurrentActivity, _uiManager.CurrentExercise);
+            _manager.SendLaunchTrace(_uiManager.CurrentActivity, _uiManager.CurrentExercise);
 
             _sensorsName1.text = "First Sensors";
             _sensorsValue1.value = 0;

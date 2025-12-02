@@ -15,7 +15,7 @@ namespace PXRLT.Test
         [SerializeField]
         private TextAsset _initializedTraceFile = null;
         [SerializeField]
-        private TextAsset _attemptedTraceFile = null;
+        private TextAsset _launchedTraceFile = null;
         [SerializeField]
         private TextAsset _eventSuccessTraceFile = null;
         [SerializeField]
@@ -108,9 +108,9 @@ namespace PXRLT.Test
 
             #region Test Attemped trace
             // Send attempt trace
-            PXRLTManager.Instance.SendAttemptTrace(activity, exercise);
+            PXRLTManager.Instance.SendLaunchTrace(activity, exercise);
             // Wait attempt trace
-            _currentTraceFile = _attemptedTraceFile;
+            _currentTraceFile = _launchedTraceFile;
             _waitResponseResult = true;
             while (_waitResponseResult)
                 yield return null;
