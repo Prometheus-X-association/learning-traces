@@ -67,10 +67,10 @@ foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
 
 // Creation of the activity
 Activity activity = new Activity();
-// id : Name of your exercise, unique for each one
-activity.ExerciseId = "EXERCISE_ID";
-// id : GUID to this linked trace to other from the same exercise
-activity.RegistrationId = System.Guid.NewGuid().ToString(); //(REGISTRATION_ID)
+// id : Name of your session, unique for each one
+activity.Id = "SESSION_ID";
+// sessionId : unique id of this specific session
+activity.RegistrationId = "00000000-0000-0000-0000-000000000000";
 // Name of your project
 activity.PlatformName = "NAME_OF_YOUR_PLATFORM";
 // language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
@@ -79,6 +79,19 @@ foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
 {
     activity.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
     activity.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+}
+
+// Creation of the exercise
+Exercise exercise = new Exercise();
+// id : Name of your exercise, unique for each one
+exercise.Id = "EXERCISE_ID";
+// id : GUID to this linked trace to other from the same exercise
+exercise.RegistrationId = "00000000-0000-0000-0000-000000000000"; //(REGISTRATION_ID)
+// language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })
+foreach (LanguageData language in PXRLTManager.Instance.LanguagesAvailable)
+{
+    exercise.NamePairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
+    exercise.DescriptionPairs.Add(new LanguagePair(language, $"Name for {language.FullName}"));
 }
 
 // Initiliaze context on PXRLTManager

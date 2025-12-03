@@ -65,7 +65,7 @@ namespace PXRLT
         /// <summary>
         /// Event send when a trace is sent
         /// </summary>
-        internal UnityEvent OnTraceSend = new UnityEvent();
+        public UnityEvent OnTraceSend = new UnityEvent();
         /// <summary>
         /// Event send when a trace is sent and _logTrace is true
         /// (only available in assembly)
@@ -204,7 +204,7 @@ namespace PXRLT
             XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("initialized")).CreateVerb();
 
             /// Initialize Object part
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/course";
             AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
@@ -213,17 +213,16 @@ namespace PXRLT
             /// Fill statement
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Context = new XAPI.Context();
+            statement.Context.Registration = activity.RegistrationId;
             statement.Context.Platform = activity.PlatformName;
             statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
+            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
             if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
-            }
             return statement;
         }
 
@@ -257,7 +256,7 @@ namespace PXRLT
             }
             XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("launched")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}/exercise/{exercise.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/exercise";
             AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
@@ -270,13 +269,11 @@ namespace PXRLT
             statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
+            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
             if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
-            }
             return statement;
         }
 
@@ -311,7 +308,7 @@ namespace PXRLT
             }
             XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("interacted")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}/event/{eventToSend.Id}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}/exercise/{exercise.Id}/event/{eventToSend.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/interaction";
             AddNameAndDefinition(ref currentActivityMetaData, eventToSend.NamePairs, new List<LanguagePair>());
@@ -328,15 +325,11 @@ namespace PXRLT
             statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
+            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
             if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
-                {
                     statement.Context.Extensions[extension.Key] = extension.Value;
-                }
-            }
             return statement;
         }
 
@@ -371,7 +364,7 @@ namespace PXRLT
             }
             XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("completed")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}/exercise/{exercise.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/exercise";
             AddNameAndDefinition(ref currentActivityMetaData, result.NamePairs, new List<LanguagePair>());
@@ -385,23 +378,21 @@ namespace PXRLT
             Dictionary<string, float> sensorsResult = new Dictionary<string, float>();
             foreach (ResultSensor sensor in result.Sensors)
                 sensorsResult[sensor.Id] = sensor.Value;
-            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}/exercise/{exercise.Id}/sensors/score", sensorsResult);
+            xapiResult.Extensions.Add($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}/exercise/{exercise.Id}/sensors/score", sensorsResult);
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Result = xapiResult;
             statement.Context = new XAPI.Context();
             statement.Context.Registration = exercise.RegistrationId;
+            statement.Context.Platform = activity.PlatformName;
+            statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
+            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
             if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
-                {
                     statement.Context.Extensions[extension.Key] = extension.Value;
-                }
-            }
             return statement;
         }
 
@@ -432,7 +423,7 @@ namespace PXRLT
             }
             XAPI.Verb verb = _verbsAvailable.Find(x => x.Name.Equals("terminated")).CreateVerb();
 
-            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.SessionId}");
+            XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/simulation";
             AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
@@ -440,17 +431,16 @@ namespace PXRLT
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
             statement.Context = new XAPI.Context();
+            statement.Context.Registration = activity.RegistrationId;
+            statement.Context.Platform = activity.PlatformName;
+            statement.Context.Language = activity.LanguageUsed.Name;
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
+            statement.Context.Extensions = new Dictionary<string, string>();
+            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
             if (contextExtensions != null)
-            {
-                if (statement.Context.Extensions == null)
-                    statement.Context.Extensions = new Dictionary<string, string>();
                 foreach (var extension in contextExtensions)
-                {
                     statement.Context.Extensions[extension.Key] = extension.Value;
-                }
-            }
             return statement;
         }
 

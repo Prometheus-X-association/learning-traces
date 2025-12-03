@@ -72,7 +72,8 @@ namespace PXRLT.Test
             }
 
             _uiManager.CurrentActivity = new Activity();
-            _uiManager.CurrentActivity.SessionId = _exerciseIDField.text;
+            _uiManager.CurrentActivity.Id = _exerciseIDField.text;
+            _uiManager.CurrentActivity.RegistrationId = System.Guid.NewGuid().ToString();
             _uiManager.CurrentActivity.PlatformName = Application.productName;
             _uiManager.CurrentActivity.LanguageUsed = _manager.LanguagesAvailable.First();
             foreach (LanguageData language in _manager.LanguagesAvailable)

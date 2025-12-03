@@ -9,9 +9,13 @@ namespace PXRLT
     public class Activity
     {
         /// <summary>
+        /// ID of the activity you want to make
+        /// </summary>
+        private string _id;
+        /// <summary>
         /// ID, it should be unique for each new activity you want to make
         /// </summary>
-        private string _sessionId;
+        private string _registrationId;
         /// <summary>
         /// Name of the project or application you want to link your traces
         /// </summary>
@@ -31,9 +35,13 @@ namespace PXRLT
 
         #region Accessors
         /// <summary>
+        /// Getter / Setter for _id
+        /// </summary>
+        public string Id { get { return _id; } set { _id = value; } }
+        /// <summary>
         /// Getter / Setter for _sessionId
         /// </summary>
-        public string SessionId { get { return _sessionId; } set { _sessionId = value; } }
+        public string RegistrationId { get { return _registrationId; } set { _registrationId = value; } }
         /// <summary>
         /// Getter / Setter for _platformName
         /// </summary>

@@ -66,7 +66,9 @@ namespace PXRLT.Test
             // Creation of the activity
             Activity activity = new Activity();
             // id : Name of your session, unique for each one
-            activity.SessionId = "SESSION_ID";
+            activity.Id = "SESSION_ID";
+            // sessionId : unique id of this specific session
+            activity.RegistrationId = "00000000-0000-0000-0000-000000000000";
             // Name of your project
             activity.PlatformName = "NAME_OF_YOUR_PLATFORM";
             // language used on languages available (ex : { en-US, English (US) } { fr-FR, French (France) })

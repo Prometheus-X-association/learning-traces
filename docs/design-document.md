@@ -157,7 +157,7 @@ The first trace is the initialisation trace, which marks the login of a user in 
       }
    },
    "object":{
-      "id":"https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c",
+      "id":"https://navy.mil/netc/xapi/activities/simulations/SESSION_ID",
       "definition":{
          "name":{
             "en-US":"Start a session in HachetteVR",
@@ -170,39 +170,43 @@ The first trace is the initialisation trace, which marks the login of a user in 
       "objectType":"Activity"
    },
    "context":{
-      "contextActivities":{
-        "parent": [
-          {
-            "id": "http://mimbus.com/courses/9685",
-            "definition": {
-              "name": {
-                "en-US": "Course fibre welding"
-              },
-              "description": {
-                "en-US": "A course that includes Exercises and lessons about fibre welding"
-              },
-              "type": "http://adlnet.gov/expapi/activities/course"
-            }
+    "registration": "f47ac10b-58cc-4372-a567-555555555555",
+    "contextActivities":{
+      "parent": [
+        {
+          "id": "http://mimbus.com/courses/9685",
+          "definition": {
+            "name": {
+              "en-US": "Course fibre welding"
+            },
+            "description": {
+              "en-US": "A course that includes Exercises and lessons about fibre welding"
+            },
+            "type": "http://adlnet.gov/expapi/activities/course"
           }
-        ],
-        "category":[
-          {
-              "id":"https://w3id.org/xapi/simulation/v1.0",
-              "definition":{
-                "name":{
-                    "en-US":"VR Exercises",
-                },
-                "description":{
-                    
-                },
-                "type":"http://id.tincanapi.com/activitytype/category"
+        }
+      ],
+      "category":[
+        {
+            "id":"https://w3id.org/xapi/simulation/v1.0",
+            "definition":{
+              "name":{
+                  "en-US":"VR Exercises",
               },
-              "objectType":"Activity"
-          }
-        ]
-      },
-      "platform":"Hachette VR",
-      "language":"en-US"
+              "description":{
+                  
+              },
+              "type":"http://id.tincanapi.com/activitytype/category"
+            },
+            "objectType":"Activity"
+        }
+      ]
+    },
+    "platform":"Hachette VR",
+    "language":"en-US",
+    "extensions":{
+      "sessionId":"b9e16535-4fc9-4c66-ac87-444444444444"
+    }
    },
    "timestamp":"",
    "version":"1.0.0"
@@ -240,7 +244,7 @@ After starting a session you can start an exercise, with a attempt trace, which 
     }
   },
   "object": {
-    "id": "https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000",
+    "id": "https://navy.mil/netc/xapi/activities/simulations/SESSION_ID/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000",
 
     "definition": {
       "name": {
@@ -282,7 +286,10 @@ After starting a session you can start an exercise, with a attempt trace, which 
       ],
     },
     "platform": "Hachette VR",
-    "language": "en-US"
+    "language": "en-US",
+    "extensions":{
+      "sessionId":"b9e16535-4fc9-4c66-ac87-444444444444"
+    }
   },
   "timestamp": "2024-03-15T09:00:00Z"
 }
@@ -329,7 +336,7 @@ At the heart of the fibre welding exercise undertaken by Jean Dupont, a series o
     }
   },
   "object": {
-    "id": "https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000/events/0221144",
+    "id": "https://navy.mil/netc/xapi/activities/simulations/SESSION_ID/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000/events/0221144",
     "definition": {
       "name": {
         "en-US": "Event in Simulator"
@@ -342,8 +349,11 @@ At the heart of the fibre welding exercise undertaken by Jean Dupont, a series o
   },
   "context": {
     "registration": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "platform": "Hachette VR",
+    "language": "en-US",
     "extensions": {
-      "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-activity-12345"
+      "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-activity-12345",
+      "sessionId":"b9e16535-4fc9-4c66-ac87-444444444444"
     }
   },
   "result": {
@@ -382,7 +392,7 @@ Result send after quitting exercise:
     }
   },
   "object": {
-    "id": "https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000",
+    "id": "https://navy.mil/netc/xapi/activities/simulations/SESSION_ID/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000",
     "definition": {
       "name": {
         "en-US": "fibre welding"
@@ -401,7 +411,7 @@ Result send after quitting exercise:
     "completion": true,
     "response": "The learner completed the fibre welding exercise.",
     "extensions": {
-      "https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000/sensors/score": {
+      "https://navy.mil/netc/xapi/activities/simulations/SESSION_ID/exercise/b9e16535-4fc9-4c66-ac87-3ad7ce510000/sensors/score": {
         "ExecutionQuality": 0,
         "Safety": 0,
         "Duration": 0,
@@ -436,12 +446,13 @@ Result send after quitting exercise:
           }
         }
       ],
-      "extensions": {
-        "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-activity-12345"
-      }
     },
     "platform": "Hachette VR",
-    "language": "en-US"
+    "language": "en-US",
+    "extensions":{
+      "https://w3id.org/xapi/cmi5/context/extensions/sessionid": "moodle-activity-12345",
+      "sessionId":"b9e16535-4fc9-4c66-ac87-444444444444"
+    }
   },
   "timestamp": "2024-03-16T09:10:00Z"
 }
@@ -471,7 +482,7 @@ Result send after quitting exercise:
       }
    },
    "object":{
-      "id":"https://navy.mil/netc/xapi/activities/simulations/b9e16535-4fc9-4c66-ac87-3ad7ce515f5c",
+      "id":"https://navy.mil/netc/xapi/activities/simulations/SESSION_ID",
       "definition":{
          "name":{
             "en-US":"Stop a session in HachetteVR",
@@ -484,6 +495,7 @@ Result send after quitting exercise:
       "objectType":"Activity"
    },
    "context":{
+      "registration":"b9e16535-4fc9-4c66-ac87-444444444444",
       "contextActivities":{
          "category":[
             {
@@ -502,7 +514,10 @@ Result send after quitting exercise:
          ]
       },
     "platform": "Hachette VR",
-    "language": "en-US"
+    "language": "en-US",
+    "extensions":{
+      "sessionId":"b9e16535-4fc9-4c66-ac87-444444444444"
+    }
    },
   "timestamp": "2024-03-16T09:10:00Z"
    "version":"1.0.0"

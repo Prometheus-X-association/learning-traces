@@ -93,6 +93,7 @@ Activity in xAPI format define the nature of our activity, it contains our sessi
 
 | Public variables      | Description       | Accessibility |
 | --------------------- | ----------------- | ------- |
+| Id                 | ID of this type of session                       | Get / Set |
 | SessionId          | Session unique ID                                | Get / Set |
 | PlatformName       | Name of the application or simulation            | Get / Set |
 | LanguageUsed       | Language used by the user                        | Get / Set |
