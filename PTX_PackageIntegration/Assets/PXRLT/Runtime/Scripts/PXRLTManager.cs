@@ -45,6 +45,8 @@ namespace PXRLT
         /// </summary>
         private bool _logTrace = false;
 
+        private const string _sessionURL = "https://w3id.org/xapi/cmi5/context/extensions/sessionid";
+
         #region Accessors
         /// <summary>
         /// Getter for _languagesAvailable
@@ -219,7 +221,7 @@ namespace PXRLT
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
             statement.Context.Extensions = new Dictionary<string, string>();
-            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
+            statement.Context.Extensions[_sessionURL] = activity.RegistrationId;
             if (contextExtensions != null)
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -259,7 +261,7 @@ namespace PXRLT
             XAPI.Activity currentActivity = new XAPI.Activity($"https://navy.mil/netc/xapi/activities/simulations/{activity.Id}/exercise/{exercise.Id}");
             XAPI.ActivityMetaData currentActivityMetaData = new XAPI.ActivityMetaData();
             currentActivityMetaData.ActivityType = "http://adlnet.gov/expapi/activities/exercise";
-            AddNameAndDefinition(ref currentActivityMetaData, activity.NamePairs, activity.DescriptionPairs);
+            AddNameAndDefinition(ref currentActivityMetaData, exercise.NamePairs, exercise.DescriptionPairs);
             currentActivity.Definition = currentActivityMetaData;
 
             XAPI.Statement statement = new XAPI.Statement(_currentActor, verb, currentActivity);
@@ -270,7 +272,7 @@ namespace PXRLT
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
             statement.Context.Extensions = new Dictionary<string, string>();
-            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
+            statement.Context.Extensions[_sessionURL] = activity.RegistrationId;
             if (contextExtensions != null)
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -326,7 +328,7 @@ namespace PXRLT
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
             statement.Context.Extensions = new Dictionary<string, string>();
-            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
+            statement.Context.Extensions[_sessionURL] = activity.RegistrationId;
             if (contextExtensions != null)
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -389,7 +391,7 @@ namespace PXRLT
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
             statement.Context.Extensions = new Dictionary<string, string>();
-            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
+            statement.Context.Extensions[_sessionURL] = activity.RegistrationId;
             if (contextExtensions != null)
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
@@ -437,7 +439,7 @@ namespace PXRLT
             if (_currentContext != null)
                 statement.Context.ContextActivities = _currentContext;
             statement.Context.Extensions = new Dictionary<string, string>();
-            statement.Context.Extensions["sessionId"] = activity.RegistrationId;
+            statement.Context.Extensions[_sessionURL] = activity.RegistrationId;
             if (contextExtensions != null)
                 foreach (var extension in contextExtensions)
                     statement.Context.Extensions[extension.Key] = extension.Value;
